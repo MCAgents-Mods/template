@@ -1,6 +1,6 @@
 ---
 name: agents-index
-description: Index of the template's local instruction folders — the rules that apply only to this repository.
+description: Index of MCAgentsTemplate's local instruction folders — the rules that apply only to this repository.
 ---
 
 # Agents Index
@@ -12,6 +12,7 @@ description: Index of the template's local instruction folders — the rules tha
 
 | File | Purpose |
 |---|---|
+| [`../rules/repository.md`](../rules/repository.md) | The rules for this mod — client side only, core compiled against and never bundled, module boundaries, names, and what must not be introduced. |
 | [`../rules/template.md`](../rules/template.md) | While this is the template: the version stays `0.0.0` and no `.agents/memory/` is created. Deleted when a copy becomes a mod. |
 
 ## Maintenance

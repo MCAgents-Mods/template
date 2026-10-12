@@ -40,7 +40,7 @@ platforms/forge/     mcagents-template-forge
 | `platforms/shared/` | `mcagents-template-shared` | `TemplateRuntime.start(Path)`, the start-up every loader calls. |
 | `platforms/fabric/` | `mcagents-template-fabric` | `TemplateFabricClient` (`ClientModInitializer`) and `fabric.mod.json`. |
 | `platforms/neoforge/` | `mcagents-template-neoforge` | `TemplateNeoForgeClient` (`@Mod`, client only) and `META-INF/neoforge.mods.toml`. |
-| `platforms/forge/` | `mcagents-template-forge` | `TemplateForgeMod` (`@Mod`, starts on the client only) and `META-INF/mods.toml`. |
+| `platforms/forge/` | `mcagents-template-forge` | `TemplateForgeMod` (`@Mod`, starts on the client only), `META-INF/mods.toml` and `pack.mcmeta`. |
 
 `settings.gradle` maps the Gradle names to those directories; the directory names and the
 module names deliberately differ, so this mod's `:api` never collides with core's in the
@@ -75,6 +75,11 @@ The mod jars land in `platforms/{fabric,neoforge,forge}/build/libs/`.
   if it is missing.
 * **The first build is slow.** Loom, ModDevGradle and ForgeGradle each fetch and prepare
   their own copy of Minecraft.
+* **The Forge jar needs `pack.mcmeta`.** Forge 26.2 refuses the resources of a mod jar
+  without one, shows a warning at start-up, and crashes when a world is created; NeoForge
+  and Fabric build the metadata themselves. Its `min_format` and `max_format` copy Forge's
+  own `pack.mcmeta` and change with the Minecraft version, so read them again from the new
+  Forge build whenever `minecraft` moves in `gradle/libs.versions.toml`.
 * **`runClient` does not put core in the development game.** Copy core's jar for the same
   loader into that loader's `run/mods/`.
 * **Nothing has been run in a real game yet.** The jars build; loading them is unproven.

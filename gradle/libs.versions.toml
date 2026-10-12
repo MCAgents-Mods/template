@@ -7,7 +7,8 @@
 # NeoForge (maven.neoforged.net) and Forge (maven.minecraftforge.net) must all publish a
 # build for it. Minecraft 26.x ships unobfuscated, so no module declares a mappings
 # coordinate. Keep these in step with MCAgents core's own catalog: a mod built for a
-# different Minecraft than core's cannot load beside it.
+# different Minecraft than core's cannot load beside it. The pack formats in the Forge
+# module's pack.mcmeta move with Minecraft: copy them from that Forge build's own pack.mcmeta.
 
 [versions]
 java = "25"

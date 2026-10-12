@@ -65,3 +65,7 @@ files under `{game_dir}/MCAgents/template/`.
 
 Each jar merges `api/`, `common/` and `platforms/shared/` into itself and requires
 `mcagents_core` at the core version it was built against or newer.
+
+The Forge jar also carries `pack.mcmeta`. Forge refuses the resources of a mod jar without
+one and crashes when a world is created; NeoForge and Fabric build that metadata themselves,
+so their jars have none.

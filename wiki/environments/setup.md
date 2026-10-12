@@ -48,7 +48,9 @@ The mod compiles against MCAgents core and does not carry it. Clone `MCAgents-Mo
 beside this repository — `../core` — and `settings.gradle` builds the two together. Pass
 `-Pcore-build=/path/to/core` for another location. Without a checkout, Gradle resolves the
 published `io.github.mcagentsmods:mcagents-core-api` and `mcagents-core-common` at the
-version in the catalog.
+version in the catalog from GitHub Packages, `https://maven.pkg.github.com/MCAgents-Mods/core`.
+GitHub Packages asks for a token even to read a public package, so set `GITHUB_ACTOR` to
+your GitHub user name and `GITHUB_TOKEN` to a token with the `read:packages` scope.
 
 ## Build
 
@@ -70,3 +72,22 @@ Builds every module, runs the `common/` tests, and writes the three mod jars to
 
 `runClient` does not put core in the development game. Build core and copy its jar for the
 same loader into that loader's `run/mods/` first.
+
+## Publish
+
+Nobody runs `./gradlew publish` by hand for a release. The **Publish** workflow,
+`.github/workflows/publish.yml`, runs on every push to `master`:
+
+1. It reads `project-version` from `gradle.properties`. At `0.0.0`, the version a mod
+   carries before its first release, it stops and publishes nothing. It also stops when the
+   tag `v{version}` already exists, so a merge that leaves the version alone publishes
+   nothing.
+2. Otherwise it builds and tests against the core version in the catalog, read from GitHub
+   Packages, publishes all six modules to GitHub Packages under this repository, and only
+   then tags the commit `v{version}`.
+
+So a release is the merge that raises `project-version`, and the core version it pins must
+already be published. A failed run leaves no tag, and the next push to `master`, or **Run
+workflow** on the Publish workflow's page in the Actions tab, tries again. GitHub Packages
+refuses to overwrite a version, so if a run failed after some modules were uploaded, delete
+those package versions before retrying.

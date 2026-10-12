@@ -1,0 +1,3 @@
+# The working plan for a task in flight. Scratch, never committed; the task record
+# under .agents/memory/tasks/ is what outlives it.
+.agents/plans/

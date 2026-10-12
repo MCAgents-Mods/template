@@ -43,7 +43,7 @@ breaks a longer one.
 | 3 | `mcagents_template` | `mcagents_{snake}` | The mod id: `MCAgentsTemplate.java`, all three manifests, the `mods {}` blocks in `platforms/fabric` and `platforms/neoforge`, docs |
 | 4 | `io.github.mcagentsmods.template` | `io.github.mcagentsmods.{package}` | Every `package` and `import` line, the Fabric entry point in `fabric.mod.json`, docs |
 | 5 | `io/github/mcagentsmods/template` | `io/github/mcagentsmods/{package}` | The source directories (move them, step 3) and any path in docs |
-| 6 | `MCAgentsTemplate` | `MCAgents{Pascal}` | Jar names (`archivesName`), POM names, the constants class, display names in the manifests, docs |
+| 6 | `MCAgentsTemplate` | `MCAgents{Pascal}` | Jar names (`archivesName`), POM names, the constants class, display names in the manifests, the description in the Forge `pack.mcmeta`, docs |
 | 7 | `Template` at the start of a class name | `{Pascal}` | `TemplatePaths`, `TemplatePathsTest`, `TemplateRuntime`, `TemplateFabricClient`, `TemplateNeoForgeClient`, `TemplateForgeMod` — names and file names |
 | 8 | `template` as the repository name | `{repo}` | `git-repo=template` in `gradle.properties`, `rootProject.name = 'template'` in `settings.gradle`, `MOD_DIRECTORY = "template"` in `MCAgentsTemplate.java`, `resolve("template")` in `TemplatePathsTest.java`, `MCAgents/template` in docs |
 | 9 | The placeholder description | The owner's sentence | `fabric.mod.json`, `neoforge.mods.toml`, `mods.toml` |

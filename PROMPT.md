@@ -55,6 +55,9 @@ breaks a longer one.
 * `gradle/libs.versions.toml` — Minecraft, the loaders, the plugins and the core version.
 * The `mcagents_core` dependency in every manifest.
 * `LICENSE`, the wrapper, `.gitignore`, `.gitattributes`, `.claude/CLAUDE.md`.
+* `.github/workflows/publish.yml`. It names no placeholder, and it publishes nothing while the
+  version is `0.0.0`, so the setup below ships nothing. The mod's first release, the first
+  merge that raises `project-version`, is the first version it publishes.
 * `{shared}/git/pull-request-template.md` in `AGENTS.md`: it names a shared file, not this mod.
 
 ## 3. Do it

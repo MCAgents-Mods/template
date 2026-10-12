@@ -1,0 +1,49 @@
+// Contracts only: interfaces, records, enums, abstract classes and constants.
+//
+// This module compiles against the JDK and MCAgents core's API, and nothing else. It must
+// never gain a dependency on Minecraft, on a loader, or on any third-party library — see
+// .agents/rules/repository.md.
+
+plugins {
+    id 'java-library'
+}
+
+base {
+    archivesName = 'MCAgentsTemplateApi'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = libs.versions.java.get() as int
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Core's types are the vocabulary every MCAgents mod speaks — a model request, a tool
+    // call, a web page. compileOnlyApi: every module above sees them, and no jar of this
+    // mod carries them, because the mcagents_core mod provides one copy in game.
+    compileOnlyApi libs.core.api
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'MCAgentsTemplateApi'
+                url = 'https://github.com/MCAgents-Mods/template'
+            }
+        }
+    }
+}

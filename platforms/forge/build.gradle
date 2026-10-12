@@ -1,0 +1,89 @@
+// The Forge mod jar: the entry point, which finds the game directory on the client, plus
+// everything platforms/shared and the modules below it carry.
+//
+// This is the only module that may reference Forge types. Start-up lives in
+// platforms/shared, the logic in common/ — see .agents/rules/repository.md.
+
+plugins {
+    id 'java'
+    alias(libs.plugins.forgegradle)
+}
+
+base {
+    archivesName = 'MCAgentsTemplateForge'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = libs.versions.java.get() as int
+}
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${libs.versions.forge.get()}")
+
+    implementation project(':mcagents-template-api')
+    implementation project(':mcagents-template-common')
+    implementation project(':mcagents-template-shared')
+}
+
+// api/, common/ and platforms/shared are this mod's own code, so their classes and resources
+// are merged into the mod jar rather than nested.
+def bundledModules = [
+        ':mcagents-template-api',
+        ':mcagents-template-common',
+        ':mcagents-template-shared'
+]
+
+tasks.named('jar', Jar) {
+    bundledModules.each { path ->
+        from project(path).sourceSets.main.output
+    }
+
+    // The license travels with the jar, renamed so it cannot be mistaken for a dependency's.
+    def projectName = project.name
+    inputs.property 'projectName', projectName
+    from(rootProject.file('LICENSE')) {
+        rename { "${it}_${projectName}" }
+    }
+}
+
+processResources {
+    def modVersion = project.version
+    // The core this build compiled against is the oldest the jar may run with.
+    def coreVersion = libs.versions.mcagents.core.get()
+    inputs.property 'version', modVersion
+    inputs.property 'coreVersion', coreVersion
+
+    filesMatching('META-INF/mods.toml') {
+        expand version: modVersion, coreVersion: coreVersion
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // The mod jar alone, with no dependency list: it already carries api, common and
+            // shared, and the loader and mcagents_core supply the rest.
+            artifact tasks.named('jar')
+
+            pom {
+                name = 'MCAgentsTemplateForge'
+                url = 'https://github.com/MCAgents-Mods/template'
+            }
+        }
+    }
+}

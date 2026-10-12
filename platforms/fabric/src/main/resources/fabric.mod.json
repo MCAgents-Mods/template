@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "mcagents_template",
+  "version": "${version}",
+  "name": "MCAgentsTemplate",
+  "description": "A starter MCAgents mod. Replace this sentence with what the mod does.",
+  "authors": [
+    "MCAgents"
+  ],
+  "contact": {
+    "homepage": "https://github.com/MCAgents-Mods/template",
+    "sources": "https://github.com/MCAgents-Mods/template",
+    "issues": "https://github.com/MCAgents-Mods/template/issues"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.mcagentsmods.template.fabric.TemplateFabricClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*",
+    "mcagents_core": ">=${coreVersion}"
+  }
+}

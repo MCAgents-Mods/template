@@ -38,3 +38,23 @@ if (new File(coreBuild, 'settings.gradle').isFile()) {
         }
     }
 }
+
+// Every project is named mcagents-template-{module}, which is also its artifact id. The
+// prefix keeps them apart from core's own :api and :common in the composite build above.
+include 'mcagents-template-api'
+project(':mcagents-template-api').projectDir = file('api')
+
+include 'mcagents-template-common'
+project(':mcagents-template-common').projectDir = file('common')
+
+include 'mcagents-template-shared'
+project(':mcagents-template-shared').projectDir = file('platforms/shared')
+
+include 'mcagents-template-fabric'
+project(':mcagents-template-fabric').projectDir = file('platforms/fabric')
+
+include 'mcagents-template-neoforge'
+project(':mcagents-template-neoforge').projectDir = file('platforms/neoforge')
+
+include 'mcagents-template-forge'
+project(':mcagents-template-forge').projectDir = file('platforms/forge')

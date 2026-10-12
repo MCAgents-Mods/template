@@ -1,0 +1,56 @@
+// The game code every loader shares: start-up now, and the screens, keys and commands the
+// mod grows into.
+//
+// Compiled against vanilla Minecraft and nothing else — no Fabric, NeoForge or Forge type may
+// appear here. Minecraft 26.x ships unobfuscated, so the same classes link against every
+// loader's game. Each loader module bundles this one into its jar and adds only its entry
+// point and its events.
+
+plugins {
+    // Loom is used for the vanilla game alone: no loader, no mod metadata, no run configs.
+    alias(libs.plugins.fabric.loom)
+}
+
+base {
+    archivesName = 'MCAgentsTemplateShared'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = libs.versions.java.get() as int
+    // Loom's game jar carries Fabric's @Environment annotation, whose enum is deliberately
+    // not on this module's classpath, and javac warns once per class that reads it with no
+    // lint switch to turn that off. Errors still fail the build.
+    options.warnings = false
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft libs.minecraft
+
+    api project(':mcagents-template-api')
+    api project(':mcagents-template-common')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'MCAgentsTemplateShared'
+                url = 'https://github.com/MCAgents-Mods/template'
+            }
+        }
+    }
+}

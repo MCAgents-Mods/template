@@ -1,0 +1,66 @@
+// Implementations of the api/ contracts: the mod's logic.
+//
+// This module must compile and be testable without Minecraft on the classpath. If a class
+// here needs a Minecraft type, the value belongs in an api/ contract supplied by the
+// platform modules instead — see .agents/rules/repository.md.
+
+plugins {
+    id 'java-library'
+}
+
+base {
+    archivesName = 'MCAgentsTemplateCommon'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.get())
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = libs.versions.java.get() as int
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':mcagents-template-api')
+
+    // Core's model client and HTTP transport. Provided in game by the mcagents_core mod,
+    // so compiled against and never bundled, like core's API above.
+    compileOnlyApi libs.core.common
+
+    // Tests run outside the game, where no core mod provides core.
+    testImplementation libs.core.api
+    testImplementation libs.core.common
+
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+}
+
+// This module carries the logic worth testing, and it is testable precisely because
+// Minecraft is not on its classpath.
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'MCAgentsTemplateCommon'
+                url = 'https://github.com/MCAgents-Mods/template'
+            }
+        }
+    }
+}

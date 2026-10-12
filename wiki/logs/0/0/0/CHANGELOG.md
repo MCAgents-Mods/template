@@ -33,4 +33,13 @@ on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
   `https://maven.pkg.github.com/MCAgents-Mods/core`, using `GITHUB_ACTOR` and
   `GITHUB_TOKEN`. That is how the Publish workflow builds a mod.
 
-What a reader has to do: nothing in this repository. In a copy, follow `PROMPT.md` once.
+## Fixed
+
+- The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which
+  `PROMPT.md` renames with the rest. Without it Forge 26.2 refused the jar's resources,
+  warned at start-up and crashed when a world was created. NeoForge and Fabric build that
+  metadata themselves, so their jars still have none.
+
+What a reader has to do: nothing in this repository. In a copy, follow `PROMPT.md` once. A
+mod copied before this fix adds `platforms/forge/src/main/resources/pack.mcmeta` with its
+own name in the description.

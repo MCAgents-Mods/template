@@ -1,0 +1,28 @@
+---
+name: changelog-0-0-0
+description: Change log for MCAgentsTemplate 0.0.0 — the first and only version of the MCAgents mod starter.
+---
+
+# 0.0.0 — 2026-10-12
+
+The MCAgents mod starter: an empty client-side mod for Fabric, NeoForge and Forge that runs
+on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
+
+## Added
+
+- `.agents/rules/template.md` — while this repository is the starter, the version stays
+  `0.0.0` and no `.agents/memory/` is created. `PROMPT.md` deletes the rule in every copy.
+- The Gradle build: the 9.7.0 wrapper, a version catalog matching core's Minecraft 26.2,
+  Fabric, NeoForge and Forge versions, a composite build with a `core` checkout beside the
+  repository, and `project-version=0.0.0`.
+- Six modules: `api/` (`MCAgentsTemplate`, the mod's identity), `common/` (`TemplatePaths`
+  and its test), `platforms/shared/` (`TemplateRuntime`, the start-up every loader calls),
+  and one entry point and manifest each in `platforms/fabric/`, `platforms/neoforge/` and
+  `platforms/forge/`, every manifest requiring `mcagents_core`.
+- The agent instruction set: `AGENTS.md`, which sends agents to `PROMPT.md` first,
+  `.claude/CLAUDE.md`, the repository rules and map, and the `wiki/` architecture and setup
+  pages.
+- `PROMPT.md` — every placeholder name, what replaces it, the commands, the check that
+  nothing was missed, and the clean-up.
+
+What a reader has to do: nothing in this repository. In a copy, follow `PROMPT.md` once.

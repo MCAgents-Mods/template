@@ -20,6 +20,12 @@ description: Index of wiki/ — the human-facing documentation for MCAgentsTempl
 |---|---|
 | [`../../wiki/environments/setup.md`](../../wiki/environments/setup.md) | Toolchain requirements, where versions live, and the commands to build and run the mod locally. |
 
+## Child Indexes
+
+| Index | Scope | Load when |
+|---|---|---|
+| [`logs-index.md`](logs-index.md) | `wiki/logs/` | You need release history or must record a change. |
+
 ## Maintenance
 
 Any page added to or removed from `wiki/` is reflected here **in the same commit**.

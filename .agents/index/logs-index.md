@@ -12,7 +12,7 @@ description: Version list for MCAgentsTemplate, newest first — each row points
 
 | Version | File | Purpose |
 |---|---|---|
-| 0.0.0 | [`../../wiki/logs/0/0/0/CHANGELOG.md`](../../wiki/logs/0/0/0/CHANGELOG.md) | The starter: the build, an empty mod for Fabric, NeoForge and Forge on core, the agent instructions, and `PROMPT.md`. |
+| 0.0.0 | [`../../wiki/logs/0/0/0/CHANGELOG.md`](../../wiki/logs/0/0/0/CHANGELOG.md) | The starter: the build, an empty mod for Fabric, NeoForge and Forge on core, the agent instructions, `PROMPT.md`, and the Publish workflow. |
 
 ## Maintenance
 

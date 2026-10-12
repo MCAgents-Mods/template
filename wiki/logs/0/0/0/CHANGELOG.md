@@ -24,5 +24,13 @@ on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
   pages.
 - `PROMPT.md` — every placeholder name, what replaces it, the commands, the check that
   nothing was missed, and the clean-up.
+- `.github/workflows/publish.yml` — on a push to `master` whose `project-version` has no
+  `v{version}` tag, builds and tests, publishes the six modules to GitHub Packages, then
+  tags the commit. At `0.0.0` it stops at the first step, so this repository, and a copy
+  before its first release, publish nothing.
+- Core from GitHub Packages: with no core checkout beside the mod, the build reads
+  `mcagents-core-api` and `mcagents-core-common` from
+  `https://maven.pkg.github.com/MCAgents-Mods/core`, using `GITHUB_ACTOR` and
+  `GITHUB_TOKEN`. That is how the Publish workflow builds a mod.
 
 What a reader has to do: nothing in this repository. In a copy, follow `PROMPT.md` once.

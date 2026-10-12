@@ -1,6 +1,6 @@
 ---
 name: root-index
-description: Router for the MCAgents mod template — lists every local index plus the shared router, and declares this repository's overrides.
+description: Router for MCAgentsTemplate — lists every local index plus the shared router, and declares this repository's overrides.
 ---
 
 # Root Index
@@ -11,6 +11,8 @@ description: Router for the MCAgents mod template — lists every local index pl
 |---|---|---|
 | `{shared}/index/root-index.md` | The shared instruction set | You need a branching, commit, pull request, planning, or creator convention. |
 | [`agents-index.md`](agents-index.md) | This repository's instruction set | You need a rule specific to this repository. |
+| [`agent-wiki-index.md`](agent-wiki-index.md) | `.agents/wiki/` agent knowledge | You need orientation, commands, or operating context written for agents. |
+| [`project-wiki-index.md`](project-wiki-index.md) | `wiki/` human documentation | You need to read or write documentation a person will read. |
 
 ## Shared Overrides
 

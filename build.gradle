@@ -1,0 +1,32 @@
+plugins {
+    // The three loader toolchains are declared once, here, so they load into one shared
+    // build classloader instead of one per module.
+    alias(libs.plugins.fabric.loom) apply false
+    alias(libs.plugins.moddevgradle) apply false
+    alias(libs.plugins.forgegradle) apply false
+}
+
+allprojects {
+    group = 'io.github.mcagentsmods'
+    version = providers.gradleProperty('project-version').get()
+}
+
+subprojects {
+    // Every module publishes under its project name, which settings.gradle sets to
+    // mcagents-template-{module}: the group alone cannot tell this mod's api from core's.
+    // The jar each module builds is named by its own archivesName, MCAgentsTemplate{Module}.
+    apply plugin: 'maven-publish'
+
+    publishing {
+        repositories {
+            maven {
+                name = 'GitHubPackages'
+                url = "https://maven.pkg.github.com/${providers.gradleProperty('git-org').get()}/${providers.gradleProperty('git-repo').get()}"
+                credentials {
+                    username = System.getenv('GITHUB_ACTOR')
+                    password = System.getenv('GITHUB_TOKEN')
+                }
+            }
+        }
+    }
+}

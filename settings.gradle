@@ -1,0 +1,40 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'NeoForged'
+            url = 'https://maven.neoforged.net/releases/'
+        }
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    // Downloads a matching JDK when the toolchain the build asks for is not installed.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'template'
+
+// MCAgents core — the model client and the web console every MCAgents mod runs on. With a
+// checkout of MCAgents-Mods/core beside this one (or wherever -Pcore-build points), Gradle
+// builds this mod against that source, so a change to core is tested here before it is
+// published. Without one, the published mcagents-core-api and mcagents-core-common are
+// resolved instead.
+def coreBuild = file(providers.gradleProperty('core-build').getOrElse('../core'))
+if (new File(coreBuild, 'settings.gradle').isFile()) {
+    includeBuild(coreBuild) {
+        dependencySubstitution {
+            substitute module('io.github.mcagentsmods:mcagents-core-api') using project(':api')
+            substitute module('io.github.mcagentsmods:mcagents-core-common') using project(':common')
+        }
+    }
+}

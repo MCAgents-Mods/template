@@ -1,3 +1,40 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# The development game directories Loom, ModDevGradle and ForgeGradle create
+run/
+runs/
+remappedSrc/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Player data must never be committed. Every MCAgents mod keeps its files under
+# MCAgents/ in the game directory.
+MCAgents/
+*.db
+
+# MCP wiring is local environment configuration, never repository content.
+# .mcp.json carries an env block a server's credentials end up in; mcps/ holds
+# checkouts of servers to run, which would vendor their content if committed.
+# AGENTS.md documents how to recreate both.
+.mcp.json
+mcps/
+
 # The working plan for a task in flight. Scratch, never committed; the task record
 # under .agents/memory/tasks/ is what outlives it.
 .agents/plans/

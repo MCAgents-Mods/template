@@ -58,12 +58,14 @@ files under `{game_dir}/MCAgents/template/`.
 There is no browser interface. Core 0.6.0 removed the web console every MCAgents mod used to
 register pages with, so an MCAgents mod is used in game only.
 
-`Holograms` is in `mcagents-core-client`, which core publishes from 0.6.0, and the template
-still compiles against core 0.5.0. Before a copy opens its first hologram it raises
-`mcagents-core` to 0.6.0 in `gradle/libs.versions.toml`, adds a `core-client` entry for
-`io.github.mcagentsmods:mcagents-core-client` beside `core-api`, substitutes it with core's
-`:platforms:client` in `settings.gradle`, and adds `compileOnly libs.core.client` to
-`platforms/shared/`. Like the rest of core, it is never bundled.
+`Holograms` is in `mcagents-core-client-{minecraft}`, which core publishes once per Minecraft
+version from 0.7.0, and the template compiles against core 0.7.0's `mcagents-core-api` and
+`mcagents-core-common` only. Before a copy opens its first hologram it substitutes
+`io.github.mcagentsmods:mcagents-core-client-{minecraft}` with core's
+`:platforms:client-{minecraft}` for each version in `settings.gradle`, and adds
+`compileOnly "io.github.mcagentsmods:mcagents-core-client-${minecraftVersion}:{coreVersion}"`
+to `platforms/shared/shared.gradle`, which builds each version subproject. Like the rest of
+core, it is never bundled.
 
 ## The jars
 

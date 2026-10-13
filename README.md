@@ -24,7 +24,8 @@ To do it by hand, follow `PROMPT.md` yourself; every name to change is listed th
 ./gradlew build
 ```
 
-The jars land in `platforms/{fabric,neoforge,forge}/build/libs/`. Requirements and the
+The jars land in `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, one per loader
+and Minecraft version. Requirements and the
 version catalog are in [wiki/environments/setup.md](wiki/environments/setup.md); the module
 split is in [wiki/information/architecture.md](wiki/information/architecture.md).
 

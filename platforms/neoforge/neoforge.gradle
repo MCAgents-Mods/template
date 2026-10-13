@@ -1,16 +1,16 @@
-// The Forge mod jar: the entry point, which finds the game directory on the client, plus
+// The NeoForge mod jar: the client entry point, which finds the game directory, plus
 // everything platforms/shared and the modules below it carry.
 //
-// This is the only module that may reference Forge types. Start-up lives in
+// This is the only module that may reference NeoForge types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-plugins {
-    id 'java'
-    alias(libs.plugins.forgegradle)
-}
+// Built once per Minecraft version: platforms/neoforge/{version}/build.gradle applies
+// ModDevGradle, then this.
+
+apply from: '../../minecraft.gradle'
 
 base {
-    archivesName = 'MCAgentsTemplateForge'
+    archivesName = 'MCAgentsTemplateNeoforge'
 }
 
 java {
@@ -26,26 +26,32 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 repositories {
-    minecraft.mavenizer(it)
-    maven fg.forgeMaven
-    maven fg.minecraftLibsMaven
     mavenCentral()
 }
 
-dependencies {
-    implementation minecraft.dependency("net.minecraftforge:forge:${libs.versions.forge.get()}")
+neoForge {
+    version = versionFor('neoforge')
 
+    mods {
+        'mcagents_template' {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
     implementation project(':mcagents-template-api')
     implementation project(':mcagents-template-common')
-    implementation project(':mcagents-template-shared')
+    implementation project(sharedModule)
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources
-// are merged into the mod jar rather than nested.
+// are merged into the mod jar rather than nested. A third-party runtime library would be
+// nested with jarJar instead.
 def bundledModules = [
         ':mcagents-template-api',
         ':mcagents-template-common',
-        ':mcagents-template-shared'
+        sharedModule
 ]
 
 tasks.named('jar', Jar) {
@@ -65,11 +71,16 @@ processResources {
     def modVersion = project.version
     // The core this build compiled against is the oldest the jar may run with.
     def coreVersion = libs.versions.mcagents.core.get()
+    def minecraft = minecraftVersion
+    def next = minecraftNext
     inputs.property 'version', modVersion
     inputs.property 'coreVersion', coreVersion
+    inputs.property 'minecraft', minecraft
+    inputs.property 'minecraftNext', next
 
-    filesMatching('META-INF/mods.toml') {
-        expand version: modVersion, coreVersion: coreVersion
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand version: modVersion, coreVersion: coreVersion, minecraft: minecraft,
+                minecraftNext: next
     }
 }
 
@@ -81,7 +92,8 @@ publishing {
             artifact tasks.named('jar')
 
             pom {
-                name = 'MCAgentsTemplateForge'
+                name = 'MCAgentsTemplateNeoforge'
+                description = "MCAgents template for NeoForge, Minecraft ${minecraftVersion}"
                 url = 'https://github.com/MCAgents-Mods/template'
             }
         }

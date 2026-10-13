@@ -1,9 +1,11 @@
 name: Release
 
-# Builds the mod's three jars, from platforms/forge, platforms/fabric and
-# platforms/neoforge, and attaches them to a GitHub release for the v{version}
-# tag that Publish created. api, common and shared are bundled inside each of
-# them, so they are not attached on their own.
+# Builds the mod's jars, from platforms/forge, platforms/fabric and
+# platforms/neoforge, once for every Minecraft version (each loader has a
+# subproject per version, platforms/{loader}/{minecraft}), and attaches them to a
+# GitHub release for the v{version} tag that Publish created:
+# MCAgentsTemplateFabric-{version}+{minecraft}.jar and so on. api, common and
+# shared are bundled inside each of them, so they are not attached on their own.
 #
 # A tag pushed with the workflow's own token starts no other workflow, so this
 # one runs when a Publish run on master finishes instead. It releases the
@@ -120,7 +122,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew assemble
 
-      - name: Collect one jar per loader
+      - name: Collect one jar per loader and Minecraft version
         if: steps.release.outputs.release == 'true'
         env:
           TAG: ${{ steps.release.outputs.tag }}
@@ -132,13 +134,23 @@ jobs:
           fi
           mkdir -p release
           for loader in $LOADERS; do
-            # The mod jar alone: the sources jar ends in -sources.jar.
-            jars=(platforms/"$loader"/build/libs/*-"$version".jar)
-            if [ ${#jars[@]} -ne 1 ] || [ ! -f "${jars[0]}" ]; then
-              echo "::error::expected one $loader jar for $version, found: ${jars[*]}"
+            # One subproject per Minecraft version, each with a build file.
+            builds=(platforms/"$loader"/*/build.gradle)
+            if [ ! -f "${builds[0]}" ]; then
+              echo "::error::no Minecraft version subproject under platforms/$loader"
               exit 1
             fi
-            cp "${jars[0]}" release/
+            for build in "${builds[@]}"; do
+              dir=$(dirname "$build")
+              minecraft=$(basename "$dir")
+              # The mod jar alone: the sources jar ends in -sources.jar.
+              jars=("$dir"/build/libs/*-"$version"+"$minecraft".jar)
+              if [ ${#jars[@]} -ne 1 ] || [ ! -f "${jars[0]}" ]; then
+                echo "::error::expected one $loader jar for $version on Minecraft $minecraft, found: ${jars[*]}"
+                exit 1
+              fi
+              cp "${jars[0]}" release/
+            done
           done
           ls -l release
 

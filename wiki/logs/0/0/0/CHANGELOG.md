@@ -48,6 +48,18 @@ on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
 What a reader has to do: in a copy, register no web pages, and raise `mcagents-core` to 0.6.0
 before the first hologram.
 
+- Every Minecraft-facing module, `platforms/shared/` and the three loaders, is built once
+  for each Minecraft version, 26.2 and 26.3, as a subproject `platforms/{module}/{minecraft}`
+  named `mcagents-template-{module}-{minecraft}`. Each version has its own catalog entries,
+  suffixed with the version, and its own jar, `MCAgentsTemplate{Loader}-{version}+{minecraft}.jar`,
+  whose manifest declares that Minecraft version and no other. The Release workflow
+  attaches all six jars. The catalog pins core 0.7.0, the first core built for both, and the
+  build needs Java 25 and the Gradle 9.7.1 wrapper, which Fabric Loom 1.18 requires for 26.3.
+
+What a reader has to do: run Gradle on Java 25. In a copy, name a loader's project with its
+Minecraft version, such as `:mcagents-template-fabric-26.2:runClient`, and put code that
+differs between versions in a class of the same name in each version folder.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

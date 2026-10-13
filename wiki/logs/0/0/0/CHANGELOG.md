@@ -28,6 +28,10 @@ on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
   `v{version}` tag, builds and tests, publishes the six modules to GitHub Packages, then
   tags the commit. At `0.0.0` it stops at the first step, so this repository, and a copy
   before its first release, publish nothing.
+- `.github/workflows/release.yml` — after each Publish run on `master`, when the
+  `v{version}` tag has no GitHub release yet, builds the Forge, Fabric and NeoForge jars from
+  the tag and attaches them to a new release whose notes are that version's changelog, then
+  deletes the run's copy of the jars. At `0.0.0` it releases nothing.
 - Core from GitHub Packages: with no core checkout beside the mod, the build reads
   `mcagents-core-api` and `mcagents-core-common` from
   `https://maven.pkg.github.com/MCAgents-Mods/core`, using `GITHUB_ACTOR` and

@@ -19,6 +19,7 @@ LICENSE              MIT license, MCAgents-Mods, 2026
 .agents/             this repository's local instruction set, indexes and agent wiki
 wiki/                human documentation and versioned change logs
 .github/workflows/   publish.yml — publishes and tags each new version that reaches master
+                     release.yml — attaches the three mod jars to each tag's GitHub release
 settings.gradle      module map, plugin repositories, the core composite build
 build.gradle         group and version for every module, the three loader plugins
 gradle.properties    project identity only — organization, repository, version
@@ -68,9 +69,10 @@ The mod jars land in `platforms/{fabric,neoforge,forge}/build/libs/`.
   checkout Gradle reads the published core artifacts from GitHub Packages, which needs
   `GITHUB_ACTOR` and `GITHUB_TOKEN` even though core is public, and fails without them.
 * **Merging a version above `0.0.0` publishes it.** The Publish workflow ships and tags any
-  new `project-version` the moment it reaches `master`, and does nothing at `0.0.0`. A
-  published version can never be overwritten, so the version changes in the release task
-  alone, and the core version the catalog pins must already be published.
+  new `project-version` the moment it reaches `master`, and does nothing at `0.0.0`; the
+  Release workflow then attaches the Forge, Fabric and NeoForge jars to that tag's GitHub
+  release. A published version can never be overwritten, so the version changes in the
+  release task alone, and the core version the catalog pins must already be published.
 * **JDK 25 compiles, JDK 21 or newer launches Gradle.** The foojay resolver downloads JDK 25
   if it is missing.
 * **The first build is slow.** Loom, ModDevGradle and ForgeGradle each fetch and prepare

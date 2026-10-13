@@ -60,6 +60,7 @@ module. Core sits under `api/` and `common/` as `compileOnlyApi`.
 | Fabric dev client | `./gradlew :mcagents-template-fabric-26.2:runClient` |
 | NeoForge dev client | `./gradlew :mcagents-template-neoforge-26.2:runClient` |
 | Forge dev client | `./gradlew :mcagents-template-forge-26.2:runClient` |
+| A 26.3 dev client | The same with `-26.3`, such as `./gradlew :mcagents-template-fabric-26.3:runClient` |
 
 The mod jars land in `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, named
 `MCAgentsTemplate{Loader}-{version}+{minecraft}.jar`.
@@ -75,11 +76,16 @@ The mod jars land in `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`
   Release workflow then attaches the Forge, Fabric and NeoForge jars to that tag's GitHub
   release. A published version can never be overwritten, so the version changes in the
   release task alone, and the core version the catalog pins must already be published.
-* **JDK 25 compiles, JDK 21 or newer launches Gradle.** The foojay resolver downloads JDK 25
-  if it is missing.
+* **Gradle runs on Java 25.** Fabric Loom 1.18, the first for 26.3, refuses an older JVM,
+  and needs Gradle 9.7 or newer.
+* **Minecraft 26.3 draws through Vulkan or OpenGL with an sRGB surface.** A virtual
+  display (Xvfb) offers no sRGB OpenGL surface, so a 26.3 dev client there needs a Vulkan
+  driver, such as Mesa's software one (lavapipe). NeoForge's early loading window is
+  OpenGL only: turn it off with `earlyWindowControl = false` in the run's
+  `config/fml.toml`.
 * **The first build is slow.** Loom, ModDevGradle and ForgeGradle each fetch and prepare
   their own copy of Minecraft.
-* **The Forge jar needs `pack.mcmeta`.** Forge 26.2 refuses the resources of a mod jar
+* **The Forge jar needs `pack.mcmeta`.** Forge refuses the resources of a mod jar
   without one, shows a warning at start-up, and crashes when a world is created; NeoForge
   and Fabric build the metadata themselves. Its `min_format` and `max_format` copy Forge's
   own `pack.mcmeta` and change with the Minecraft version, so each version keeps its own in

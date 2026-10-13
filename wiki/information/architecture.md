@@ -6,8 +6,8 @@ description: How MCAgentsTemplate is split into modules, why each boundary exist
 # Architecture
 
 An MCAgents mod is one codebase that ships three jars — Fabric, NeoForge and Forge — and
-runs beside the MCAgents core mod, which supplies the language model client and the local
-web console every MCAgents mod shares.
+runs beside the MCAgents core mod, which supplies the language model client and the
+holograms every MCAgents mod shows its interface on, in game.
 
 ## Modules
 
@@ -38,7 +38,7 @@ compiled against the vanilla game links against every loader's game. Screens and
 are written once; each loader module adds only what that loader insists on doing itself.
 
 **Why core is never bundled.** The `mcagents_core` mod provides core's classes in game. A
-mod that also carried them would load a second copy, and two copies of core's web registry
+mod that also carried them would load a second copy, and two copies of core's open hologram
 or token store do not see each other.
 
 ## Start-up
@@ -53,7 +53,17 @@ files under `{game_dir}/MCAgents/template/`.
 | To | Use |
 |---|---|
 | Call a language model | Core's model client, from `io.github.mcagentsmods.core.api.model` |
-| Serve pages in the browser | Register a `WebModule` with core's web registry; core owns the server, the token and the page shell |
+| Show an interface in game | Build a `Hologram` from core's panels and open it with core's `Holograms`; core places it, draws it, takes the clicks and the typing, and closes it when the player walks away. See core's [`wiki/api/hologram.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/hologram.md) |
+
+There is no browser interface. Core 0.6.0 removed the web console every MCAgents mod used to
+register pages with, so an MCAgents mod is used in game only.
+
+`Holograms` is in `mcagents-core-client`, which core publishes from 0.6.0, and the template
+still compiles against core 0.5.0. Before a copy opens its first hologram it raises
+`mcagents-core` to 0.6.0 in `gradle/libs.versions.toml`, adds a `core-client` entry for
+`io.github.mcagentsmods:mcagents-core-client` beside `core-api`, substitutes it with core's
+`:platforms:client` in `settings.gradle`, and adds `compileOnly libs.core.client` to
+`platforms/shared/`. Like the rest of core, it is never bundled.
 
 ## The jars
 

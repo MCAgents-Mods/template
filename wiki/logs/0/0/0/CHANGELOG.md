@@ -33,6 +33,17 @@ on MCAgents core, and the `PROMPT.md` that turns a copy of it into a named mod.
   `https://maven.pkg.github.com/MCAgents-Mods/core`, using `GITHUB_ACTOR` and
   `GITHUB_TOKEN`. That is how the Publish workflow builds a mod.
 
+## Changed
+
+- The architecture page, the repository rule and the `settings.gradle` and `api/build.gradle`
+  comments describe core's holograms instead of its web console, which core 0.6.0 removed. A
+  mod shows its interface in game, on a `Hologram` opened with `Holograms` from
+  `mcagents-core-client`. The template still compiles against core 0.5.0; the architecture
+  page says what to raise before using a hologram.
+
+What a reader has to do: in a copy, register no web pages, and raise `mcagents-core` to 0.6.0
+before the first hologram.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

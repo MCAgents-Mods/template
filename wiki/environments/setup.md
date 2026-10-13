@@ -9,8 +9,8 @@ description: Toolchain requirements, where versions live, and the commands to bu
 
 | Tool | Version | Note |
 |---|---|---|
-| JDK | 21 or newer to launch Gradle; 25 to compile | The `foojay-resolver-convention` plugin downloads JDK 25 if you do not have it. |
-| Gradle | 9.7.0 | Comes from the committed wrapper. Use `./gradlew`, never a system `gradle`. |
+| JDK | 25 | Gradle runs on it: Fabric Loom 1.18, which builds for Minecraft 26.3, refuses an older one. |
+| Gradle | 9.7.1 | Comes from the committed wrapper. Use `./gradlew`, never a system `gradle`. |
 | Git | any recent | |
 
 ## Where versions live
@@ -29,8 +29,8 @@ Every dependency coordinate lives in the Gradle version catalog at
 | Entry | Value |
 |---|---|
 | Java | 25 |
-| Fabric Loader | 0.19.3 |
-| Fabric Loom | 1.17.19 |
+| Fabric Loader | 0.19.5 |
+| Fabric Loom | 1.18.4 |
 | ModDevGradle | 2.0.148 |
 | ForgeGradle | 7.0.40 |
 | MCAgents core | 0.7.0 |
@@ -38,12 +38,12 @@ Every dependency coordinate lives in the Gradle version catalog at
 The entries that move with Minecraft come in one block per Minecraft version, each suffixed
 with it (`fabric-api-26-2` for 26.2):
 
-| Entry | 26.2 |
-|---|---|
-| Minecraft | 26.2 |
-| Fabric API | 0.157.0+26.2 |
-| NeoForge | 26.2.0.90 |
-| Forge | 26.2-65.1.3 |
+| Entry | 26.2 | 26.3 |
+|---|---|---|
+| Minecraft | 26.2 | 26.3 |
+| Fabric API | 0.157.0+26.2 | 0.162.0+26.3 |
+| NeoForge | 26.2.0.90 | 26.3.0.76 |
+| Forge | 26.2-65.1.3 | 26.3-66.0.11 |
 
 Keep the Minecraft and loader versions the same as core's own catalog. A mod built for a
 different Minecraft than core's cannot load beside it.
@@ -51,7 +51,7 @@ different Minecraft than core's cannot load beside it.
 ## One build per Minecraft version
 
 `platforms/shared` and the three loader modules compile against Minecraft, so each is built
-once for every Minecraft version, listed once in `settings.gradle`. Each is a folder of shared
+once for every Minecraft version, 26.2 and 26.3, listed once in `settings.gradle`. Each is a folder of shared
 sources with one Gradle subproject per version, `platforms/{module}/{minecraft}`, named
 `mcagents-template-{module}-{minecraft}`; that name is also its artifact id. The subproject
 compiles the module's shared `src/` together with its own `src/`, which holds only what
@@ -90,10 +90,16 @@ version to `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, such as
 ./gradlew :mcagents-template-fabric-26.2:runClient
 ./gradlew :mcagents-template-neoforge-26.2:runClient
 ./gradlew :mcagents-template-forge-26.2:runClient
+./gradlew :mcagents-template-fabric-26.3:runClient   # and neoforge-26.3, forge-26.3
 ```
 
 `runClient` does not put core in the development game. Build core and copy its jar for the
 same loader and Minecraft version into that version subproject's `run/mods/` first.
+
+Minecraft 26.3 draws through Vulkan or OpenGL with an sRGB surface. On a virtual display
+(Xvfb), which offers no sRGB OpenGL surface, a 26.3 client needs a Vulkan driver such as
+Mesa's software one (lavapipe), and NeoForge's OpenGL-only early loading window must be off:
+`earlyWindowControl = false` in the run's `config/fml.toml`.
 
 ## Publish
 

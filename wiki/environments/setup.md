@@ -123,9 +123,9 @@ each time a Publish run on `master` finishes:
 1. It reads `project-version`. At `0.0.0` it stops and releases nothing. It also stops when
    the tag `v{version}` does not exist, or already has a GitHub release.
 2. Otherwise it checks out the tag, runs `./gradlew assemble` with the same token Publish
-   uses, and takes one jar each from `platforms/forge`, `platforms/fabric` and
-   `platforms/neoforge`.
-3. It creates the `v{version}` release with the three jars attached and that version's
+   uses, and takes one jar from `platforms/forge`, `platforms/fabric` and
+   `platforms/neoforge` for every Minecraft version, from each `{minecraft}/build/libs/`.
+3. It creates the `v{version}` release with those jars attached and that version's
    `wiki/logs/{Major}/{Minor}/{Patch}/CHANGELOG.md` as its notes, then deletes the copy of
    the jars the run kept in Actions.
 

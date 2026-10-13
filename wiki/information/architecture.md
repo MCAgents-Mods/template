@@ -5,8 +5,8 @@ description: How MCAgentsTemplate is split into modules, why each boundary exist
 
 # Architecture
 
-An MCAgents mod is one codebase that ships three jars — Fabric, NeoForge and Forge — and
-runs beside the MCAgents core mod, which supplies the language model client and the
+An MCAgents mod is one codebase that ships a Fabric, a NeoForge and a Forge jar for each
+Minecraft version it supports, and runs beside the MCAgents core mod, which supplies the language model client and the
 holograms every MCAgents mod shows its interface on, in game.
 
 ## Modules
@@ -71,12 +71,13 @@ core, it is never bundled.
 
 | Loader | Toolchain | Manifest | Jar |
 |---|---|---|---|
-| Fabric | Fabric Loom | `fabric.mod.json` | `MCAgentsTemplateFabric-{version}.jar` |
-| NeoForge | ModDevGradle | `META-INF/neoforge.mods.toml` | `MCAgentsTemplateNeoforge-{version}.jar` |
-| Forge | ForgeGradle | `META-INF/mods.toml` | `MCAgentsTemplateForge-{version}.jar` |
+| Fabric | Fabric Loom | `fabric.mod.json` | `MCAgentsTemplateFabric-{version}+{minecraft}.jar` |
+| NeoForge | ModDevGradle | `META-INF/neoforge.mods.toml` | `MCAgentsTemplateNeoforge-{version}+{minecraft}.jar` |
+| Forge | ForgeGradle | `META-INF/mods.toml` | `MCAgentsTemplateForge-{version}+{minecraft}.jar` |
 
-Each jar merges `api/`, `common/` and `platforms/shared/` into itself and requires
-`mcagents_core` at the core version it was built against or newer.
+Each jar merges `api/`, `common/` and that Minecraft version's `platforms/shared/` into
+itself, declares that Minecraft version and no other, and requires `mcagents_core` at the
+core version it was built against or newer.
 
 The Forge jar also carries `pack.mcmeta`. Forge refuses the resources of a mod jar without
 one and crashes when a world is created; NeoForge and Fabric build that metadata themselves,

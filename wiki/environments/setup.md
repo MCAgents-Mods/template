@@ -91,3 +91,22 @@ already be published. A failed run leaves no tag, and the next push to `master`,
 workflow** on the Publish workflow's page in the Actions tab, tries again. GitHub Packages
 refuses to overwrite a version, so if a run failed after some modules were uploaded, delete
 those package versions before retrying.
+
+## Release
+
+The mod jars a player installs are attached to the repository's **Releases** page, one
+GitHub release per version. The **Release** workflow, `.github/workflows/release.yml`, runs
+each time a Publish run on `master` finishes:
+
+1. It reads `project-version`. At `0.0.0` it stops and releases nothing. It also stops when
+   the tag `v{version}` does not exist, or already has a GitHub release.
+2. Otherwise it checks out the tag, runs `./gradlew assemble` with the same token Publish
+   uses, and takes one jar each from `platforms/forge`, `platforms/fabric` and
+   `platforms/neoforge`.
+3. It creates the `v{version}` release with the three jars attached and that version's
+   `wiki/logs/{Major}/{Minor}/{Patch}/CHANGELOG.md` as its notes, then deletes the copy of
+   the jars the run kept in Actions.
+
+A release that failed is made by the next merge to `master`. **Run workflow** on the
+Release workflow's page does the same by hand; its `tag` input releases an earlier tag that
+has none.

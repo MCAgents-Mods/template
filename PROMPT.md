@@ -58,6 +58,9 @@ breaks a longer one.
 * `.github/workflows/publish.yml`. It names no placeholder, and it publishes nothing while the
   version is `0.0.0`, so the setup below ships nothing. The mod's first release, the first
   merge that raises `project-version`, is the first version it publishes.
+* `.github/workflows/release.yml`. It names no placeholder either, and it releases nothing
+  while the version is `0.0.0`. After each Publish run it attaches the mod's three jars to
+  the new tag's GitHub release.
 * `{shared}/git/pull-request-template.md` in `AGENTS.md`: it names a shared file, not this mod.
 
 ## 3. Do it

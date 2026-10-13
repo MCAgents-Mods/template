@@ -24,7 +24,7 @@ plugins {
 
 rootProject.name = 'template'
 
-// MCAgents core — the model client and the web console every MCAgents mod runs on. With a
+// MCAgents core — the model client and the holograms every MCAgents mod runs on. With a
 // checkout of MCAgents-Mods/core beside this one (or wherever -Pcore-build points), Gradle
 // builds this mod against that source, so a change to core is tested here before it is
 // published. Without one, the published mcagents-core-api and mcagents-core-common are

@@ -33,8 +33,10 @@ the `lxagents-agents-base` MCP connector and is never copied here. Nothing under
 * Every loader manifest declares a required dependency on `mcagents_core` at the core
   version the build compiled against or newer.
 * **What core already does is not written again here.** The model client, its transport,
-  the request types, model naming and the web console are core's; a change to them is made
+  the request types, model naming and the holograms are core's; a change to them is made
   in core.
+* **The interface is in game.** A mod shows what it needs on core's holograms, never in a
+  browser: core has had no web console since 0.6.0.
 
 ## Module boundaries
 

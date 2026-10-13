@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
     // Core's types are the vocabulary every MCAgents mod speaks — a model request, a tool
-    // call, a web page. compileOnlyApi: every module above sees them, and no jar of this
+    // call, a hologram. compileOnlyApi: every module above sees them, and no jar of this
     // mod carries them, because the mcagents_core mod provides one copy in game.
     compileOnlyApi libs.core.api
 }

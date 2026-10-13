@@ -4,9 +4,10 @@
 // This is the only module that may reference Fabric types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-plugins {
-    alias(libs.plugins.fabric.loom)
-}
+// Built once per Minecraft version: platforms/fabric/{version}/build.gradle applies
+// Loom, then this.
+
+apply from: '../../minecraft.gradle'
 
 base {
     archivesName = 'MCAgentsTemplateFabric'
@@ -37,13 +38,13 @@ loom {
 }
 
 dependencies {
-    minecraft libs.minecraft
+    minecraft libraryFor('minecraft')
     implementation libs.fabric.loader
-    implementation libs.fabric.api
+    implementation libraryFor('fabric-api')
 
     implementation project(':mcagents-template-api')
     implementation project(':mcagents-template-common')
-    implementation project(':mcagents-template-shared')
+    implementation project(sharedModule)
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources
@@ -52,7 +53,7 @@ dependencies {
 def bundledModules = [
         ':mcagents-template-api',
         ':mcagents-template-common',
-        ':mcagents-template-shared'
+        sharedModule
 ]
 
 tasks.named('jar', Jar) {
@@ -72,11 +73,16 @@ processResources {
     def modVersion = project.version
     // The core this build compiled against is the oldest the jar may run with.
     def coreVersion = libs.versions.mcagents.core.get()
+    def minecraft = minecraftVersion
+    def fabricLoader = libs.versions.fabric.loader.get()
     inputs.property 'version', modVersion
     inputs.property 'coreVersion', coreVersion
+    inputs.property 'minecraft', minecraft
+    inputs.property 'fabricLoader', fabricLoader
 
     filesMatching('fabric.mod.json') {
-        expand version: modVersion, coreVersion: coreVersion
+        expand version: modVersion, coreVersion: coreVersion, minecraft: minecraft,
+                fabricLoader: fabricLoader
     }
 }
 
@@ -89,6 +95,7 @@ publishing {
 
             pom {
                 name = 'MCAgentsTemplateFabric'
+                description = "MCAgents template for Fabric, Minecraft ${minecraftVersion}"
                 url = 'https://github.com/MCAgents-Mods/template'
             }
         }

@@ -26,10 +26,11 @@ gradle.properties    project identity only — organization, repository, version
 gradle/              the wrapper and libs.versions.toml
 api/                 mcagents-template-api
 common/              mcagents-template-common
-platforms/shared/    mcagents-template-shared
-platforms/fabric/    mcagents-template-fabric
-platforms/neoforge/  mcagents-template-neoforge
-platforms/forge/     mcagents-template-forge
+platforms/minecraft.gradle  applied by every Minecraft version subproject below
+platforms/shared/    shared sources; {minecraft}/ is mcagents-template-shared-{minecraft}
+platforms/fabric/    shared sources; {minecraft}/ is mcagents-template-fabric-{minecraft}
+platforms/neoforge/  shared sources; {minecraft}/ is mcagents-template-neoforge-{minecraft}
+platforms/forge/     shared sources; {minecraft}/ is mcagents-template-forge-{minecraft}
 ```
 
 ## The six modules
@@ -38,10 +39,10 @@ platforms/forge/     mcagents-template-forge
 |---|---|---|
 | `api/` | `mcagents-template-api` | `MCAgentsTemplate` — the mod id, name and on-disk directory names. |
 | `common/` | `mcagents-template-common` | `TemplatePaths` — the mod's directory under a game directory — and its test. |
-| `platforms/shared/` | `mcagents-template-shared` | `TemplateRuntime.start(Path)`, the start-up every loader calls. |
-| `platforms/fabric/` | `mcagents-template-fabric` | `TemplateFabricClient` (`ClientModInitializer`) and `fabric.mod.json`. |
-| `platforms/neoforge/` | `mcagents-template-neoforge` | `TemplateNeoForgeClient` (`@Mod`, client only) and `META-INF/neoforge.mods.toml`. |
-| `platforms/forge/` | `mcagents-template-forge` | `TemplateForgeMod` (`@Mod`, starts on the client only), `META-INF/mods.toml` and `pack.mcmeta`. |
+| `platforms/shared/` | `mcagents-template-shared-{minecraft}` | `TemplateRuntime.start(Path)`, the start-up every loader calls. |
+| `platforms/fabric/` | `mcagents-template-fabric-{minecraft}` | `TemplateFabricClient` (`ClientModInitializer`) and `fabric.mod.json`. |
+| `platforms/neoforge/` | `mcagents-template-neoforge-{minecraft}` | `TemplateNeoForgeClient` (`@Mod`, client only) and `META-INF/neoforge.mods.toml`. |
+| `platforms/forge/` | `mcagents-template-forge-{minecraft}` | `TemplateForgeMod` (`@Mod`, starts on the client only) and `META-INF/mods.toml`; each version's `pack.mcmeta` in `platforms/forge/{minecraft}/`. |
 
 `settings.gradle` maps the Gradle names to those directories; the directory names and the
 module names deliberately differ, so this mod's `:api` never collides with core's in the
@@ -56,11 +57,12 @@ module. Core sits under `api/` and `common/` as `compileOnlyApi`.
 |---|---|
 | Build everything and run the tests | `./gradlew build` |
 | Run the `common/` tests only | `./gradlew :mcagents-template-common:test` |
-| Fabric dev client | `./gradlew :mcagents-template-fabric:runClient` |
-| NeoForge dev client | `./gradlew :mcagents-template-neoforge:runClient` |
-| Forge dev client | `./gradlew :mcagents-template-forge:runClient` |
+| Fabric dev client | `./gradlew :mcagents-template-fabric-26.2:runClient` |
+| NeoForge dev client | `./gradlew :mcagents-template-neoforge-26.2:runClient` |
+| Forge dev client | `./gradlew :mcagents-template-forge-26.2:runClient` |
 
-The mod jars land in `platforms/{fabric,neoforge,forge}/build/libs/`.
+The mod jars land in `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, named
+`MCAgentsTemplate{Loader}-{version}+{minecraft}.jar`.
 
 ## Gotchas
 
@@ -80,8 +82,12 @@ The mod jars land in `platforms/{fabric,neoforge,forge}/build/libs/`.
 * **The Forge jar needs `pack.mcmeta`.** Forge 26.2 refuses the resources of a mod jar
   without one, shows a warning at start-up, and crashes when a world is created; NeoForge
   and Fabric build the metadata themselves. Its `min_format` and `max_format` copy Forge's
-  own `pack.mcmeta` and change with the Minecraft version, so read them again from the new
-  Forge build whenever `minecraft` moves in `gradle/libs.versions.toml`.
+  own `pack.mcmeta` and change with the Minecraft version, so each version keeps its own in
+  `platforms/forge/{minecraft}/`, read from that version's Forge build.
+* **Each Minecraft version is a subproject, not a switch.** Code that differs between
+  versions goes in a class of the same name in every version folder; shared code never
+  checks the version. Adding a version is a catalog block, an entry in `settings.gradle`'s
+  list, and a folder per module.
 * **`runClient` does not put core in the development game.** Copy core's jar for the same
-  loader into that loader's `run/mods/`.
+  loader and Minecraft version into that version subproject's `run/mods/`.
 * **Nothing has been run in a real game yet.** The jars build; loading them is unproven.

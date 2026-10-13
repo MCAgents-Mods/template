@@ -16,14 +16,14 @@ A starter MCAgents mod. Replace this sentence with what the mod does.
 [[dependencies.mcagents_template]]
 modId = "forge"
 mandatory = true
-versionRange = "[65,)"
+versionRange = "[${forgeMajor},)"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.mcagents_template]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[26.2,26.3)"
+versionRange = "[${minecraft},${minecraftNext})"
 ordering = "NONE"
 side = "CLIENT"
 

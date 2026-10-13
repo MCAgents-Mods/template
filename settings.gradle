@@ -24,6 +24,13 @@ plugins {
 
 rootProject.name = 'template'
 
+// Every Minecraft version this mod builds for. platforms/shared and each loader compile
+// against Minecraft, so each is a folder of shared sources, platforms/{module}/src, with one
+// subproject per version in platforms/{module}/{version}, holding only what differs for that
+// version. The subproject is named mcagents-template-{module}-{version}, which is also its
+// published artifact id. The catalog carries one block of coordinates per version.
+def minecraftVersions = ['26.2']
+
 // MCAgents core — the model client and the holograms every MCAgents mod runs on. With a
 // checkout of MCAgents-Mods/core beside this one (or wherever -Pcore-build points), Gradle
 // builds this mod against that source, so a change to core is tested here before it is
@@ -47,14 +54,9 @@ project(':mcagents-template-api').projectDir = file('api')
 include 'mcagents-template-common'
 project(':mcagents-template-common').projectDir = file('common')
 
-include 'mcagents-template-shared'
-project(':mcagents-template-shared').projectDir = file('platforms/shared')
-
-include 'mcagents-template-fabric'
-project(':mcagents-template-fabric').projectDir = file('platforms/fabric')
-
-include 'mcagents-template-neoforge'
-project(':mcagents-template-neoforge').projectDir = file('platforms/neoforge')
-
-include 'mcagents-template-forge'
-project(':mcagents-template-forge').projectDir = file('platforms/forge')
+['shared', 'fabric', 'neoforge', 'forge'].each { module ->
+    minecraftVersions.each { minecraft ->
+        include "mcagents-template-${module}-${minecraft}"
+        project(":mcagents-template-${module}-${minecraft}").projectDir = file("platforms/${module}/${minecraft}")
+    }
+}

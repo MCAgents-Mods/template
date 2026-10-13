@@ -29,18 +29,40 @@ Every dependency coordinate lives in the Gradle version catalog at
 | Entry | Value |
 |---|---|
 | Java | 25 |
-| Minecraft | 26.2 |
 | Fabric Loader | 0.19.3 |
-| Fabric API | 0.157.0+26.2 |
 | Fabric Loom | 1.17.19 |
-| NeoForge | 26.2.0.90 |
 | ModDevGradle | 2.0.148 |
-| Forge | 26.2-65.1.3 |
 | ForgeGradle | 7.0.40 |
-| MCAgents core | 0.5.0 |
+| MCAgents core | 0.7.0 |
+
+The entries that move with Minecraft come in one block per Minecraft version, each suffixed
+with it (`fabric-api-26-2` for 26.2):
+
+| Entry | 26.2 |
+|---|---|
+| Minecraft | 26.2 |
+| Fabric API | 0.157.0+26.2 |
+| NeoForge | 26.2.0.90 |
+| Forge | 26.2-65.1.3 |
 
 Keep the Minecraft and loader versions the same as core's own catalog. A mod built for a
 different Minecraft than core's cannot load beside it.
+
+## One build per Minecraft version
+
+`platforms/shared` and the three loader modules compile against Minecraft, so each is built
+once for every Minecraft version, listed once in `settings.gradle`. Each is a folder of shared
+sources with one Gradle subproject per version, `platforms/{module}/{minecraft}`, named
+`mcagents-template-{module}-{minecraft}`; that name is also its artifact id. The subproject
+compiles the module's shared `src/` together with its own `src/`, which holds only what
+differs for that version, such as Forge's `pack.mcmeta`. Code that differs between versions
+is a class of the same name in each version folder; shared code never checks the version.
+`platforms/minecraft.gradle`, which every version subproject applies, takes the version from
+the folder's name, finds its coordinates in the catalog, and names the jar
+`MCAgentsTemplate{Module}-{version}+{minecraft}.jar`. The loader metadata is expanded per
+version, so each jar declares its own Minecraft version and no other. `api` and `common` name
+no Minecraft type and are built once. Adding a version is a catalog block, an entry in
+`settings.gradle`'s list, and a folder per module.
 
 ## MCAgents core
 
@@ -58,20 +80,20 @@ your GitHub user name and `GITHUB_TOKEN` to a token with the `read:packages` sco
 ./gradlew build
 ```
 
-Builds every module, runs the `common/` tests, and writes the three mod jars to
-`platforms/fabric/build/libs/`, `platforms/neoforge/build/libs/` and
-`platforms/forge/build/libs/`.
+Builds every module, runs the `common/` tests, and writes one mod jar per loader and Minecraft
+version to `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, such as
+`platforms/fabric/26.2/build/libs/MCAgentsTemplateFabric-{version}+26.2.jar`.
 
 ## Run
 
 ```bash
-./gradlew :mcagents-template-fabric:runClient
-./gradlew :mcagents-template-neoforge:runClient
-./gradlew :mcagents-template-forge:runClient
+./gradlew :mcagents-template-fabric-26.2:runClient
+./gradlew :mcagents-template-neoforge-26.2:runClient
+./gradlew :mcagents-template-forge-26.2:runClient
 ```
 
 `runClient` does not put core in the development game. Build core and copy its jar for the
-same loader into that loader's `run/mods/` first.
+same loader and Minecraft version into that version subproject's `run/mods/` first.
 
 ## Publish
 

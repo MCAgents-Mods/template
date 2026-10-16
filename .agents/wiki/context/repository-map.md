@@ -27,10 +27,10 @@ gradle/              the wrapper and libs.versions.toml
 api/                 mcagents-template-api
 common/              mcagents-template-common
 platforms/minecraft.gradle  applied by each Minecraft version subproject below
-platforms/shared/    shared sources; {minecraft}/ is mcagents-template-shared-{minecraft}
-platforms/fabric/    shared sources; {minecraft}/ is mcagents-template-fabric-{minecraft}
-platforms/neoforge/  shared sources; {minecraft}/ is mcagents-template-neoforge-{minecraft}
-platforms/forge/     shared sources; {minecraft}/ is mcagents-template-forge-{minecraft}
+platforms/shared/    shared sources; {minecraft}/ is mcagents-template-shared
+platforms/fabric/    shared sources; {minecraft}/ is mcagents-template-fabric
+platforms/neoforge/  shared sources; {minecraft}/ is mcagents-template-neoforge
+platforms/forge/     shared sources; {minecraft}/ is mcagents-template-forge
 ```
 
 ## The six modules
@@ -39,10 +39,10 @@ platforms/forge/     shared sources; {minecraft}/ is mcagents-template-forge-{mi
 |---|---|---|
 | `api/` | `mcagents-template-api` | `MCAgentsTemplate` — the mod id, name and on-disk directory names. |
 | `common/` | `mcagents-template-common` | `TemplatePaths` — the mod's directory under a game directory — and its test. |
-| `platforms/shared/` | `mcagents-template-shared-{minecraft}` | `TemplateRuntime.start(Path)`, the start-up every loader calls. |
-| `platforms/fabric/` | `mcagents-template-fabric-{minecraft}` | `TemplateFabricClient` (`ClientModInitializer`) and `fabric.mod.json`. |
-| `platforms/neoforge/` | `mcagents-template-neoforge-{minecraft}` | `TemplateNeoForgeClient` (`@Mod`, client only) and `META-INF/neoforge.mods.toml`. |
-| `platforms/forge/` | `mcagents-template-forge-{minecraft}` | `TemplateForgeMod` (`@Mod`, starts on the client only) and `META-INF/mods.toml`; the `pack.mcmeta` in `platforms/forge/{minecraft}/`. |
+| `platforms/shared/` | `mcagents-template-shared` | `TemplateRuntime.start(Path)`, the start-up every loader calls. |
+| `platforms/fabric/` | `mcagents-template-fabric` | `TemplateFabricClient` (`ClientModInitializer`) and `fabric.mod.json`. |
+| `platforms/neoforge/` | `mcagents-template-neoforge` | `TemplateNeoForgeClient` (`@Mod`, client only) and `META-INF/neoforge.mods.toml`. |
+| `platforms/forge/` | `mcagents-template-forge` | `TemplateForgeMod` (`@Mod`, starts on the client only) and `META-INF/mods.toml`; the `pack.mcmeta` in `platforms/forge/{minecraft}/`. |
 
 `settings.gradle` maps the Gradle names to those directories; the directory names and the
 module names deliberately differ, so this mod's `:api` never collides with core's in the
@@ -57,10 +57,9 @@ module. Core sits under `api/` and `common/` as `compileOnlyApi`.
 |---|---|
 | Build everything and run the tests | `./gradlew build` |
 | Run the `common/` tests only | `./gradlew :mcagents-template-common:test` |
-| Fabric dev client | `./gradlew :mcagents-template-fabric-26.3:runClient` |
-| NeoForge dev client | `./gradlew :mcagents-template-neoforge-26.3:runClient` |
-| Forge dev client | `./gradlew :mcagents-template-forge-26.3:runClient` |
-| A 26.3 dev client | The same with `-26.3`, such as `./gradlew :mcagents-template-fabric-26.3:runClient` |
+| Fabric dev client | `./gradlew :mcagents-template-fabric:runClient` |
+| NeoForge dev client | `./gradlew :mcagents-template-neoforge:runClient` |
+| Forge dev client | `./gradlew :mcagents-template-forge:runClient` |
 
 The mod jars land in `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, named
 `MCAgentsTemplate{Loader}-{version}+{minecraft}.jar`.

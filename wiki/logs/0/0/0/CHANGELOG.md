@@ -80,6 +80,14 @@ with no version, and move to the next Minecraft release by replacing the version
 What a reader has to do: in a copy, name a project without `mcagents-`, such as
 `:{repo}-fabric:runClient`, and ask core for `core-api` and `core-common`.
 
+- The catalog pins core 0.10.0, which carries the tool registry, the agent and the agents
+  menu that were the separate MCAgents agents mod. The architecture page says where a mod
+  registers a tool, asks the agent and adds a button to the menu G shows.
+
+What a reader has to do: in a copy, take tools, the agent and menu buttons from core's
+`io.github.mcagentsmods.core.tool`, `core.api.agent`, `core.api.button` and
+`core.common.agent` packages, and depend on `mcagents_core` alone.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

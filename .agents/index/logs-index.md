@@ -12,7 +12,7 @@ description: Version list for MCAgentsTemplate, newest first — each row points
 
 | Version | File | Purpose |
 |---|---|---|
-| 0.0.0 | [`../../wiki/logs/0/0/0/CHANGELOG.md`](../../wiki/logs/0/0/0/CHANGELOG.md) | The starter: the build, an empty mod for Fabric, NeoForge and Forge on core, the agent instructions, `PROMPT.md`, the Publish and Release workflows, `pack.mcmeta` in the Forge jar, and a jar per loader for Minecraft 26.2 and 26.3. |
+| 0.0.0 | [`../../wiki/logs/0/0/0/CHANGELOG.md`](../../wiki/logs/0/0/0/CHANGELOG.md) | The starter: the build, an empty mod for Fabric, NeoForge and Forge on core, the agent instructions, `PROMPT.md`, the Publish and Release workflows, `pack.mcmeta` in the Forge jar, and a jar per loader for Minecraft 26.3, the latest release and the only one supported. |
 
 ## Maintenance
 

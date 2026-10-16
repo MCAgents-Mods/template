@@ -6,8 +6,9 @@
 // loader's game. Each loader module bundles this one into its jar and adds only its entry
 // point and its events.
 
-// Built once per Minecraft version: platforms/shared/{version}/build.gradle applies Loom,
-// used for the vanilla game alone (no loader, no mod metadata, no run configs), then this.
+// Built for the Minecraft version the mod supports: platforms/shared/{version}/build.gradle
+// applies Loom, used for the vanilla game alone (no loader, no mod metadata, no run
+// configs), then this.
 
 apply from: '../../minecraft.gradle'
 

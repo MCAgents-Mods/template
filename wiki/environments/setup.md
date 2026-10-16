@@ -36,33 +36,35 @@ Every dependency coordinate lives in the Gradle version catalog at
 | MCAgents core | 0.7.0 |
 
 The entries that move with Minecraft come in one block per Minecraft version, each suffixed
-with it (`fabric-api-26-2` for 26.2):
+with it (`fabric-api-26-3` for 26.3):
 
-| Entry | 26.2 | 26.3 |
-|---|---|---|
-| Minecraft | 26.2 | 26.3 |
-| Fabric API | 0.157.0+26.2 | 0.162.0+26.3 |
-| NeoForge | 26.2.0.90 | 26.3.0.76 |
-| Forge | 26.2-65.1.3 | 26.3-66.0.11 |
+| Entry | 26.3 |
+|---|---|
+| Minecraft | 26.3 |
+| Fabric API | 0.162.0+26.3 |
+| NeoForge | 26.3.0.76 |
+| Forge | 26.3-66.0.11 |
 
 Keep the Minecraft and loader versions the same as core's own catalog. A mod built for a
 different Minecraft than core's cannot load beside it.
 
-## One build per Minecraft version
+## The Minecraft version
 
-`platforms/shared` and the three loader modules compile against Minecraft, so each is built
-once for every Minecraft version, 26.2 and 26.3, listed once in `settings.gradle`. Each is a folder of shared
-sources with one Gradle subproject per version, `platforms/{module}/{minecraft}`, named
+The mod supports **only the latest Minecraft release, today 26.3**, and never an older one
+beside it. `platforms/shared` and the three loader modules compile against Minecraft, so each
+is built for that version, listed once in `settings.gradle`. Each is a folder of shared
+sources with a Gradle subproject for the version, `platforms/{module}/{minecraft}`, named
 `mcagents-template-{module}-{minecraft}`; that name is also its artifact id. The subproject
-compiles the module's shared `src/` together with its own `src/`, which holds only what
-differs for that version, such as Forge's `pack.mcmeta`. Code that differs between versions
-is a class of the same name in each version folder; shared code never checks the version.
-`platforms/minecraft.gradle`, which every version subproject applies, takes the version from
+compiles the module's shared `src/` together with its own `src/`, which holds only what is
+particular to that version, such as Forge's `pack.mcmeta`. Code whose Minecraft API changes
+between releases is a class in the version folder; shared code never checks the version.
+`platforms/minecraft.gradle`, which the version subproject applies, takes the version from
 the folder's name, finds its coordinates in the catalog, and names the jar
-`MCAgentsTemplate{Module}-{version}+{minecraft}.jar`. The loader metadata is expanded per
-version, so each jar declares its own Minecraft version and no other. `api` and `common` name
-no Minecraft type and are built once. Adding a version is a catalog block, an entry in
-`settings.gradle`'s list, and a folder per module.
+`MCAgentsTemplate{Module}-{version}+{minecraft}.jar`, so the jar name keeps the game's
+version. The loader metadata is expanded from the version, so each jar declares that
+Minecraft version and no other. `api` and `common` name no Minecraft type and are built once.
+Moving to a new Minecraft release replaces the version: the entry in `settings.gradle`, the
+catalog block, and each module's version folder.
 
 ## MCAgents core
 
@@ -80,17 +82,15 @@ your GitHub user name and `GITHUB_TOKEN` to a token with the `read:packages` sco
 ./gradlew build
 ```
 
-Builds every module, runs the `common/` tests, and writes one mod jar per loader and Minecraft
-version to `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, such as
-`platforms/fabric/26.2/build/libs/MCAgentsTemplateFabric-{version}+26.2.jar`.
+Builds every module, runs the `common/` tests, and writes one mod jar per loader to `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, such as
+`platforms/fabric/26.3/build/libs/MCAgentsTemplateFabric-{version}+26.3.jar`.
 
 ## Run
 
 ```bash
-./gradlew :mcagents-template-fabric-26.2:runClient
-./gradlew :mcagents-template-neoforge-26.2:runClient
-./gradlew :mcagents-template-forge-26.2:runClient
-./gradlew :mcagents-template-fabric-26.3:runClient   # and neoforge-26.3, forge-26.3
+./gradlew :mcagents-template-fabric-26.3:runClient
+./gradlew :mcagents-template-neoforge-26.3:runClient
+./gradlew :mcagents-template-forge-26.3:runClient
 ```
 
 `runClient` does not put core in the development game. Build core and copy its jar for the
@@ -130,7 +130,7 @@ each time a Publish run on `master` finishes:
    the tag `v{version}` does not exist, or already has a GitHub release.
 2. Otherwise it checks out the tag, runs `./gradlew assemble` with the same token Publish
    uses, and takes one jar from `platforms/forge`, `platforms/fabric` and
-   `platforms/neoforge` for every Minecraft version, from each `{minecraft}/build/libs/`.
+   `platforms/neoforge`, from the version folder's `{minecraft}/build/libs/`.
 3. It creates the `v{version}` release with those jars attached and that version's
    `wiki/logs/{Major}/{Minor}/{Patch}/CHANGELOG.md` as its notes, then deletes the copy of
    the jars the run kept in Actions.

@@ -4,8 +4,8 @@
 // This is the only module that may reference Forge types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-// Built once per Minecraft version: platforms/forge/{version}/build.gradle applies
-// ForgeGradle, then this.
+// Built for the Minecraft version the mod supports: platforms/forge/{version}/build.gradle
+// applies ForgeGradle, then this.
 
 apply from: '../../minecraft.gradle'
 
@@ -67,7 +67,7 @@ processResources {
     def coreVersion = libs.versions.mcagents.core.get()
     def minecraft = minecraftVersion
     def next = minecraftNext
-    // The loader's major version, which mods.toml ranges are in: 65 from 26.2-65.1.3.
+    // The loader's major version, which mods.toml ranges are in: 66 from 26.3-66.0.11.
     def forgeMajor = versionFor('forge').tokenize('-')[1].tokenize('.')[0]
     inputs.property 'version', modVersion
     inputs.property 'coreVersion', coreVersion

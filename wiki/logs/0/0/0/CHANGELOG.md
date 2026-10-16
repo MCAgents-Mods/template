@@ -71,6 +71,15 @@ What a reader has to do: in a copy, run a loader as `:mcagents-template-fabric:r
 with no version, and move to the next Minecraft release by replacing the version in
 `settings.gradle`, the catalog block and each module's version folder.
 
+- The Gradle projects and artifact ids drop the repeated `mcagents-`: `template-api`,
+  `template-common`, `template-shared` and the loaders' `template-{loader}`, which `PROMPT.md`
+  renames to `{repo}-…` in a copy. Only the library modules are published, `api`, `common` and
+  `shared`; the Fabric, NeoForge and Forge jars are attached to the GitHub release only. The
+  catalog pins core 0.9.0, the first whose artifact ids are `core-api` and `core-common`.
+
+What a reader has to do: in a copy, name a project without `mcagents-`, such as
+`:{repo}-fabric:runClient`, and ask core for `core-api` and `core-common`.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

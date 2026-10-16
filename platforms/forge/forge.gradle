@@ -35,16 +35,16 @@ repositories {
 dependencies {
     implementation minecraft.dependency("net.minecraftforge:forge:${versionFor('forge')}")
 
-    implementation project(':mcagents-template-api')
-    implementation project(':mcagents-template-common')
+    implementation project(':template-api')
+    implementation project(':template-common')
     implementation project(sharedModule)
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources
 // are merged into the mod jar rather than nested.
 def bundledModules = [
-        ':mcagents-template-api',
-        ':mcagents-template-common',
+        ':template-api',
+        ':template-common',
         sharedModule
 ]
 

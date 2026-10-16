@@ -39,7 +39,7 @@ breaks a longer one.
 | # | Find | Replace with | Where it appears |
 |---|---|---|---|
 | 1 | `MCAgents-Mods/template` | `MCAgents-Mods/{repo}` | Build files, manifests, docs — every GitHub URL |
-| 2 | `mcagents-template-` | `mcagents-{repo}-` | `settings.gradle`, every module's `build.gradle`, docs — the Gradle project names and artifact ids |
+| 2 | `template-` at the start of a project name | `{repo}-` | `settings.gradle`, every module's `build.gradle`, docs — the Gradle project names and artifact ids, such as `template-api` |
 | 3 | `mcagents_template` | `mcagents_{snake}` | The mod id: `MCAgentsTemplate.java`, all three manifests, the `mods {}` blocks in `platforms/fabric` and `platforms/neoforge`, docs |
 | 4 | `io.github.mcagentsmods.template` | `io.github.mcagentsmods.{package}` | Every `package` and `import` line, the Fabric entry point in `fabric.mod.json`, docs |
 | 5 | `io/github/mcagentsmods/template` | `io/github/mcagentsmods/{package}` | The source directories (move them, step 3) and any path in docs |
@@ -84,7 +84,7 @@ REPO=foo-bar; SNAKE=foo_bar; PACKAGE=foobar; PASCAL=FooBar
 files=$(git ls-files | grep -v -e '^gradle/wrapper/' -e '^gradlew' -e '^PROMPT.md$')
 perl -pi -e "
   s{MCAgents-Mods/template}{MCAgents-Mods/$REPO}g;
-  s{mcagents-template-}{mcagents-$REPO-}g;
+  s{\btemplate-}{$REPO-}g;
   s{mcagents_template}{mcagents_$SNAKE}g;
   s{io\.github\.mcagentsmods\.template}{io.github.mcagentsmods.$PACKAGE}g;
   s{io/github/mcagentsmods/template}{io/github/mcagentsmods/$PACKAGE}g;

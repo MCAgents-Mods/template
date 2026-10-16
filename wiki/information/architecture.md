@@ -53,13 +53,19 @@ files under `{game_dir}/MCAgents/template/`.
 | To | Use |
 |---|---|
 | Call a language model | Core's model client, from `io.github.mcagentsmods.core.api.model` |
+| Give the agent a tool | Register a `ToolSpec` and its body in `ToolRegistry.shared()`, from `io.github.mcagentsmods.core.tool`; core's agent offers it when a prompt needs its category. See core's [`wiki/api/tool-registry.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/tool-registry.md) |
+| Answer a prompt with tools | `Agents.agent(client)`, from `io.github.mcagentsmods.core.common.agent`. See core's [`wiki/api/agent.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/agent.md) |
+| Put a button on the menu G shows | Register an `AgentButton` with `Agents.buttons()`. See core's [`wiki/api/buttons.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/buttons.md) |
 | Show an interface in game | Build a `Hologram` from core's panels and open it with core's `Holograms`; core places it, draws it, takes the clicks and the typing, and closes it when the player walks away. See core's [`wiki/api/hologram.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/hologram.md) |
 
 There is no browser interface. Core 0.6.0 removed the web console every MCAgents mod used to
-register pages with, so an MCAgents mod is used in game only.
+register pages with, so an MCAgents mod is used in game only. Up to core 0.9.0 the tool
+registry, the agent and the menu were a separate mod, MCAgents agents (`mcagents_agents`);
+from core 0.10.0 they are part of core, and a mod needs core alone.
 
 `Holograms` is in `core-client`, which core publishes for the latest Minecraft release, and
-the template compiles against core 0.9.0's `core-api` and `core-common` only. Core's artifact
+the template compiles against core 0.10.0's `core-api` and `core-common` only, which bring
+`core-tool`. Core's artifact
 ids are `core-{module}` from 0.9.0; before that they started with `mcagents-`. Before a copy
 opens its first hologram it substitutes `io.github.mcagentsmods:core-client` with core's
 `:platforms:client` in `settings.gradle`, and adds

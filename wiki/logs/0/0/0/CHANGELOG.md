@@ -60,6 +60,17 @@ What a reader has to do: run Gradle on Java 25. In a copy, name a loader's proje
 Minecraft version, such as `:mcagents-template-fabric-26.2:runClient`, and put code that
 differs between versions in a class of the same name in each version folder.
 
+- The template supports **only the latest Minecraft release, 26.3**. The 26.2 subprojects,
+  catalog block and Forge `pack.mcmeta` are gone, and no older version will be kept beside
+  the latest again. The version subprojects and their artifact ids lose the Minecraft
+  version, `mcagents-template-{module}`, while the jars keep it,
+  `MCAgentsTemplate{Loader}-{version}+26.3.jar`. The Release workflow attaches three jars.
+  The catalog pins core 0.8.0, whose ids drop the version the same way.
+
+What a reader has to do: in a copy, run a loader as `:mcagents-template-fabric:runClient`,
+with no version, and move to the next Minecraft release by replacing the version in
+`settings.gradle`, the catalog block and each module's version folder.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

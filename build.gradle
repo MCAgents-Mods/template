@@ -32,7 +32,7 @@ subprojects {
     }
 
     // Every library module publishes under its project name, which settings.gradle sets to
-    // mcagents-template-{module}: the group alone cannot tell this mod's api from core's.
+    // template-{module}: the group alone cannot tell this mod's api from core's.
     // The loader modules publish nothing; their jars go to the GitHub release instead.
     // The jar each module builds is named by its own archivesName, MCAgentsTemplate{Module}.
     apply plugin: 'maven-publish'

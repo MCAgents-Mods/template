@@ -33,7 +33,7 @@ Every dependency coordinate lives in the Gradle version catalog at
 | Fabric Loom | 1.18.4 |
 | ModDevGradle | 2.0.148 |
 | ForgeGradle | 7.0.40 |
-| MCAgents core | 0.8.0 |
+| MCAgents core | 0.9.0 |
 
 The entries that move with Minecraft come in one block per Minecraft version, each suffixed
 with it (`fabric-api-26-3` for 26.3):
@@ -54,7 +54,7 @@ The mod supports **only the latest Minecraft release, today 26.3**, and never an
 beside it. `platforms/shared` and the three loader modules compile against Minecraft, so each
 is built for that version, listed once in `settings.gradle`. Each is a folder of shared
 sources with a Gradle subproject for the version, `platforms/{module}/{minecraft}`, named
-`mcagents-template-{module}`, without the version; that name is also its artifact id. The subproject
+`template-{module}`, without the version; that name is also its artifact id. The subproject
 compiles the module's shared `src/` together with its own `src/`, which holds only what is
 particular to that version, such as Forge's `pack.mcmeta`. Code whose Minecraft API changes
 between releases is a class in the version folder; shared code never checks the version.
@@ -71,7 +71,7 @@ catalog block, and each module's version folder.
 The mod compiles against MCAgents core and does not carry it. Clone `MCAgents-Mods/core`
 beside this repository — `../core` — and `settings.gradle` builds the two together. Pass
 `-Pcore-build=/path/to/core` for another location. Without a checkout, Gradle resolves the
-published `io.github.mcagentsmods:mcagents-core-api` and `mcagents-core-common` at the
+published `io.github.mcagentsmods:core-api` and `core-common` at the
 version in the catalog from GitHub Packages, `https://maven.pkg.github.com/MCAgents-Mods/core`.
 GitHub Packages asks for a token even to read a public package, so set `GITHUB_ACTOR` to
 your GitHub user name and `GITHUB_TOKEN` to a token with the `read:packages` scope.
@@ -88,9 +88,9 @@ Builds every module, runs the `common/` tests, and writes one mod jar per loader
 ## Run
 
 ```bash
-./gradlew :mcagents-template-fabric:runClient
-./gradlew :mcagents-template-neoforge:runClient
-./gradlew :mcagents-template-forge:runClient
+./gradlew :template-fabric:runClient
+./gradlew :template-neoforge:runClient
+./gradlew :template-forge:runClient
 ```
 
 `runClient` does not put core in the development game. Build core and copy its jar for the

@@ -39,8 +39,8 @@ repositories {
 dependencies {
     minecraft libraryFor('minecraft')
 
-    api project(':mcagents-template-api')
-    api project(':mcagents-template-common')
+    api project(':template-api')
+    api project(':template-common')
 }
 
 publishing {

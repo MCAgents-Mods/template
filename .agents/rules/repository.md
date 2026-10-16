@@ -26,10 +26,9 @@ the `lxagents-agents-base` MCP connector and is never copied here. Nothing under
 
 ## MCAgents core
 
-* **Core is compiled against, never bundled.** `mcagents-core-api` and
-  `mcagents-core-common` are `compileOnlyApi`, and the `mcagents_core` mod provides them in
-  game. A mod jar that carries a core class would load a second copy beside the one every
-  other mod uses.
+* **Core is compiled against, never bundled.** `core-api` and `core-common` are
+  `compileOnlyApi`, and the `mcagents_core` mod provides them in game. A mod jar that
+  carries a core class would load a second copy beside the one every other mod uses.
 * Every loader manifest declares a required dependency on `mcagents_core` at the core
   version the build compiled against or newer.
 * **What core already does is not written again here.** The model client, its transport,
@@ -46,12 +45,12 @@ reasoning.
 
 | Module | Directory | Gradle name | May depend on |
 |---|---|---|---|
-| API | `api/` | `mcagents-template-api` | The JDK and MCAgents core's API. |
-| Common | `common/` | `mcagents-template-common` | `api/`, MCAgents core, and plain JVM libraries. |
-| Shared platform | `platforms/shared/` | `mcagents-template-shared` | all of the above and vanilla Minecraft — no loader. |
-| Fabric platform | `platforms/fabric/` | `mcagents-template-fabric` | all of the above, Fabric. |
-| NeoForge platform | `platforms/neoforge/` | `mcagents-template-neoforge` | all of the above, NeoForge. |
-| Forge platform | `platforms/forge/` | `mcagents-template-forge` | all of the above, Forge. |
+| API | `api/` | `template-api` | The JDK and MCAgents core's API. |
+| Common | `common/` | `template-common` | `api/`, MCAgents core, and plain JVM libraries. |
+| Shared platform | `platforms/shared/` | `template-shared` | all of the above and vanilla Minecraft — no loader. |
+| Fabric platform | `platforms/fabric/` | `template-fabric` | all of the above, Fabric. |
+| NeoForge platform | `platforms/neoforge/` | `template-neoforge` | all of the above, NeoForge. |
+| Forge platform | `platforms/forge/` | `template-forge` | all of the above, Forge. |
 
 * `api/` holds **contracts only** — interfaces, records, enums, sealed types, abstract
   classes and constants. No implementation logic, no I/O, no third-party dependency.
@@ -72,8 +71,8 @@ reasoning.
 
 ## Names
 
-* Every Gradle project is `mcagents-template-{module}`, which is also its artifact id under
-  the group `io.github.mcagentsmods`. Every jar is `MCAgentsTemplate{Module}`.
+* Every Gradle project is `template-{module}`, which is also its artifact id, under the group
+  `io.github.mcagentsmods`, when it is published. Every jar is `MCAgentsTemplate{Module}`.
 * Packages live under `io.github.mcagentsmods.template.{api|common|shared|fabric|neoforge|forge}`.
 * The mod id is `mcagents_template` in every manifest, in `MCAgentsTemplate.MOD_ID`, and in
   the Loom and ModDevGradle `mods {}` blocks.
@@ -82,7 +81,7 @@ reasoning.
 
 ```bash
 ./gradlew build                                   # every module, the tests, all three mod jars
-./gradlew :mcagents-template-common:test          # the logic, without Minecraft
+./gradlew :template-common:test                   # the logic, without Minecraft
 ```
 
 A `core` checkout beside this repository is built together with it; see

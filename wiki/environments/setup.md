@@ -111,8 +111,9 @@ Nobody runs `./gradlew publish` by hand for a release. The **Publish** workflow,
    tag `v{version}` already exists, so a merge that leaves the version alone publishes
    nothing.
 2. Otherwise it builds and tests against the core version in the catalog, read from GitHub
-   Packages, publishes all six modules to GitHub Packages under this repository, and only
-   then tags the commit `v{version}`.
+   Packages, publishes the library modules (`api`, `common` and `shared`) to GitHub Packages
+   under this repository, and only then tags the commit `v{version}`. The mod jars are not
+   published there; the Release workflow below attaches them to the version's GitHub release.
 
 So a release is the merge that raises `project-version`, and the core version it pins must
 already be published. A failed run leaves no tag, and the next push to `master`, or **Run

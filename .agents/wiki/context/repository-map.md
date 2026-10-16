@@ -18,7 +18,7 @@ README.md            human overview
 LICENSE              MIT license, MCAgents-Mods, 2026
 .agents/             this repository's local instruction set, indexes and agent wiki
 wiki/                human documentation and versioned change logs
-.github/workflows/   publish.yml — publishes and tags each new version that reaches master
+.github/workflows/   publish.yml — publishes the library modules, tags each new version on master
                      release.yml — attaches a jar per loader and Minecraft version to each tag's release
 settings.gradle      module map, plugin repositories, the core composite build
 build.gradle         group and version for every module, the three loader plugins

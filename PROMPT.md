@@ -128,7 +128,7 @@ git grep -n -i template -- . ':!gradlew' ':!PROMPT.md' ':!README.md' ':!wiki/log
 The first command must print nothing. The second must pass, and
 `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/` must hold
 `MCAgents{Pascal}Fabric-0.0.0+{minecraft}.jar`, `MCAgents{Pascal}Neoforge-0.0.0+{minecraft}.jar`
-and `MCAgents{Pascal}Forge-0.0.0+{minecraft}.jar` for every Minecraft version in
+and `MCAgents{Pascal}Forge-0.0.0+{minecraft}.jar` for the Minecraft version in
 `settings.gradle`.
 
 ## 5. Clean up

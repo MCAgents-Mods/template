@@ -1,8 +1,9 @@
 name: Release
 
 # Builds the mod's jars, from platforms/forge, platforms/fabric and
-# platforms/neoforge, once for every Minecraft version (each loader has a
-# subproject per version, platforms/{loader}/{minecraft}), and attaches them to a
+# platforms/neoforge, for every Minecraft version the tag builds (each loader has
+# a subproject per version, platforms/{loader}/{minecraft}; today that is the
+# latest release alone), and attaches them to a
 # GitHub release for the v{version} tag that Publish created:
 # MCAgentsTemplateFabric-{version}+{minecraft}.jar and so on. api, common and
 # shared are bundled inside each of them, so they are not attached on their own.

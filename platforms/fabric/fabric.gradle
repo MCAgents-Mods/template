@@ -4,8 +4,8 @@
 // This is the only module that may reference Fabric types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-// Built once per Minecraft version: platforms/fabric/{version}/build.gradle applies
-// Loom, then this.
+// Built for the Minecraft version the mod supports: platforms/fabric/{version}/build.gradle
+// applies Loom, then this.
 
 apply from: '../../minecraft.gradle'
 

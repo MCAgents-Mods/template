@@ -1,7 +1,7 @@
 name: Publish
 
 # Publishes the api and common jars, and the shared, fabric, neoforge and forge
-# jars of every Minecraft version, to GitHub Packages and tags the commit when a
+# jars of the Minecraft version this mod supports, to GitHub Packages and tags the commit when a
 # release lands on master.
 #
 # The version is project-version in gradle.properties. The first step looks for

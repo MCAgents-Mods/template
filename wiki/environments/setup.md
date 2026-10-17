@@ -33,7 +33,7 @@ Every dependency coordinate lives in the Gradle version catalog at
 | Fabric Loom | 1.18.4 |
 | ModDevGradle | 2.0.148 |
 | ForgeGradle | 7.0.40 |
-| MCAgents core | 0.10.0 |
+| MCAgents core | 0.11.0 |
 
 The entries that move with Minecraft come in one block per Minecraft version, each suffixed
 with it (`fabric-api-26-3` for 26.3):

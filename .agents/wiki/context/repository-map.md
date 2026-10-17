@@ -51,6 +51,12 @@ composite build.
 The dependency chain is one-way: `api/` ← `common/` ← `platforms/shared/` ← each loader
 module. Core sits under `api/` and `common/` as `compileOnlyApi`.
 
+No build file declares `implementation`. Each loader module compiles against its own modules
+and the loader with `compileOnly`, and gives every such line a `runtimeOnly` twin for
+`runClient`; loader modules are never published, so that reaches nothing else. What a jar
+carries comes only from its `jar` task's merge (and, for a third-party library, `include` or
+`jarJar`).
+
 ## Commands
 
 | Task | Command |

@@ -39,12 +39,22 @@ loom {
 
 dependencies {
     minecraft libraryFor('minecraft')
-    implementation libs.fabric.loader
-    implementation libraryFor('fabric-api')
 
-    implementation project(':template-api')
-    implementation project(':template-common')
-    implementation project(sharedModule)
+    // Compiled against, never shipped through a configuration: the game provides Fabric
+    // Loader and Fabric API, and the jar task below merges this mod's own modules.
+    compileOnly libs.fabric.loader
+    compileOnly libraryFor('fabric-api')
+    compileOnly project(':template-api')
+    compileOnly project(':template-common')
+    compileOnly project(sharedModule)
+
+    // The dev client (runClient) runs from this module's class path, so it needs them there
+    // too. This module is never published, so runtimeOnly reaches nothing else.
+    runtimeOnly libs.fabric.loader
+    runtimeOnly libraryFor('fabric-api')
+    runtimeOnly project(':template-api')
+    runtimeOnly project(':template-common')
+    runtimeOnly project(sharedModule)
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources

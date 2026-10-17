@@ -95,6 +95,15 @@ What a reader has to do: in a copy that opens holograms, give each hologram that
 beside another of its kind its own id, and read `Holograms.openIds()` where it read
 `openId()`.
 
+- No Gradle file declares `implementation`. The loader modules compile against this mod's own
+  modules and their loader (Fabric Loader and Fabric API, or Forge) with `compileOnly`, each
+  with a `runtimeOnly` twin so the development client still finds them. What a jar carries
+  comes only from its `jar` task's merge, never from a configuration. The jars are unchanged.
+
+What a reader has to do: in a copy, add a third-party runtime library as `compileOnly` where it
+is compiled against, nest it with `include` (Fabric) or `jarJar` (NeoForge, Forge), and give
+the loader module a `runtimeOnly` line for it.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

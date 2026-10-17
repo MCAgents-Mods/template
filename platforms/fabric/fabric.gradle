@@ -40,21 +40,21 @@ loom {
 dependencies {
     minecraft libraryFor('minecraft')
 
-    // Compiled against, never shipped through a configuration: the game provides Fabric
-    // Loader and Fabric API, and the jar task below merges this mod's own modules.
+    // This mod's own modules are part of it: the jar task below merges their classes, and the
+    // dev client runs them from this module's class path. This module is never published, so
+    // implementation reaches nothing else. Core is not declared here: api/ and common/ compile
+    // against it with compileOnlyApi, since the mcagents_core mod provides it in game.
+    implementation project(':template-api')
+    implementation project(':template-common')
+    implementation project(sharedModule)
+
+    // Only compiled against: the game provides Fabric Loader and Fabric API at runtime.
     compileOnly libs.fabric.loader
     compileOnly libraryFor('fabric-api')
-    compileOnly project(':template-api')
-    compileOnly project(':template-common')
-    compileOnly project(sharedModule)
 
-    // The dev client (runClient) runs from this module's class path, so it needs them there
-    // too. This module is never published, so runtimeOnly reaches nothing else.
+    // The dev client (runClient) is the one place no game provides them, so it gets them here.
     runtimeOnly libs.fabric.loader
     runtimeOnly libraryFor('fabric-api')
-    runtimeOnly project(':template-api')
-    runtimeOnly project(':template-common')
-    runtimeOnly project(sharedModule)
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources

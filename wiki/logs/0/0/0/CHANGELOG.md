@@ -111,14 +111,19 @@ than a screen, and add a `Form` case to any `switch` over `HologramPanel`.
 What a reader has to do: nothing, unless a copy picks models; then store a `ModelChoice`, null
 for "use the global model", and resolve it with `Models.chat(own)`.
 
-- No Gradle file declares `implementation`. The loader modules compile against this mod's own
-  modules and their loader (Fabric Loader and Fabric API, or Forge) with `compileOnly`, each
-  with a `runtimeOnly` twin so the development client still finds them. What a jar carries
-  comes only from its `jar` task's merge, never from a configuration. The jars are unchanged.
+- The loader modules implement this mod's own modules: each of Fabric, Forge and NeoForge
+  declares `template-api`, `template-common` and the shared module with `implementation`, since
+  they are part of the mod its jar ships. Everything provided at runtime by someone else is
+  `compileOnly`: core (`compileOnlyApi` under `api/` and `common/`), and the loader (Fabric
+  Loader and Fabric API, or Forge), which keeps a `runtimeOnly` line for the development client.
+  What a jar carries comes only from its `jar` task's merge, never from a configuration. The
+  jars are unchanged.
 
-What a reader has to do: in a copy, add a third-party runtime library as `compileOnly` where it
-is compiled against, nest it with `include` (Fabric) or `jarJar` (NeoForge, Forge), and give
-the loader module a `runtimeOnly` line for it.
+What a reader has to do: in a copy, give a new module of the mod's own an `implementation` line
+in each loader module and add it to the jar task's merge. Add another mod, or a library the game
+provides, as `compileOnly`. Add a third-party runtime library as `compileOnly` where it is
+compiled against, nest it with `include` (Fabric) or `jarJar` (NeoForge, Forge), and give the
+loader module a `runtimeOnly` line for it.
 
 ## Fixed
 

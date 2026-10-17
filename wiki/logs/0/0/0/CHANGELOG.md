@@ -95,6 +95,14 @@ What a reader has to do: in a copy that opens holograms, give each hologram that
 beside another of its kind its own id, and read `Holograms.openIds()` where it read
 `openId()`.
 
+- The catalog pins core 0.12.0, whose `Form` panel makes a page of fields a hologram: text,
+  typed boxes (one drawn as stars for a key, one with suggestions behind an arrow), a
+  multi-line area, switches, steppers and buttons. `Hologram.onClose` runs when a hologram
+  closes. The architecture page says so.
+
+What a reader has to do: in a copy with a settings page, build it as a `Form` hologram rather
+than a screen, and add a `Form` case to any `switch` over `HologramPanel`.
+
 - No Gradle file declares `implementation`. The loader modules compile against this mod's own
   modules and their loader (Fabric Loader and Fabric API, or Forge) with `compileOnly`, each
   with a `runtimeOnly` twin so the development client still finds them. What a jar carries

@@ -103,6 +103,14 @@ beside another of its kind its own id, and read `Holograms.openIds()` where it r
 What a reader has to do: in a copy with a settings page, build it as a `Form` hologram rather
 than a screen, and add a `Form` case to any `switch` over `HologramPanel`.
 
+- The catalog pins core 0.13.0, where a model is a `ModelChoice` (the provider it is called
+  through and the model) and core keeps the player's global model, which the Models page edits.
+  A task with no model of its own resolves it with `Models.chat(own)` or `Models.embedding(own)`.
+  The architecture page says so.
+
+What a reader has to do: nothing, unless a copy picks models; then store a `ModelChoice`, null
+for "use the global model", and resolve it with `Models.chat(own)`.
+
 - No Gradle file declares `implementation`. The loader modules compile against this mod's own
   modules and their loader (Fabric Loader and Fabric API, or Forge) with `compileOnly`, each
   with a `runtimeOnly` twin so the development client still finds them. What a jar carries

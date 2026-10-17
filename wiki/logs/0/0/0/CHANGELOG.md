@@ -88,6 +88,13 @@ What a reader has to do: in a copy, take tools, the agent and menu buttons from 
 `io.github.mcagentsmods.core.tool`, `core.api.agent`, `core.api.button` and
 `core.common.agent` packages, and depend on `mcagents_core` alone.
 
+- The catalog pins core 0.11.0, where several holograms stand at once, one per id, and the
+  `PickList` panel lists rows to pick from under a nav bar. The architecture page says so.
+
+What a reader has to do: in a copy that opens holograms, give each hologram that may stand
+beside another of its kind its own id, and read `Holograms.openIds()` where it read
+`openId()`.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

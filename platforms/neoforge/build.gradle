@@ -4,10 +4,19 @@
 // This is the only module that may reference NeoForge types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-// Built for the Minecraft version the mod supports: platforms/neoforge/{version}/build.gradle
-// applies ModDevGradle, then this.
+plugins {
+    id 'net.neoforged.moddev'
+}
 
-apply from: '../../minecraft.gradle'
+// The one Minecraft version this mod supports, the latest release. The catalog's minecraft
+// entry is the only place it is named.
+def minecraftVersion = libs.versions.minecraft.get()
+
+// The first Minecraft version this one does not cover, for the closed ranges the loader
+// metadata declares: 26.3 -> 26.4.
+def minecraftNext = minecraftVersion.tokenize('.').with { parts ->
+    "${parts[0]}.${(parts[1] as int) + 1}"
+}
 
 base {
     archivesName = 'MCAgentsTemplateNeoforge'
@@ -30,7 +39,7 @@ repositories {
 }
 
 neoForge {
-    version = versionFor('neoforge')
+    version = libs.versions.neoforge.get()
 
     mods {
         'mcagents_template' {
@@ -46,7 +55,7 @@ dependencies {
     // against it with compileOnlyApi, since the mcagents_core mod provides it in game.
     implementation project(':template-api')
     implementation project(':template-common')
-    implementation project(sharedModule)
+    implementation project(':template-shared')
 
     // NeoForge itself is not declared here: ModDevGradle compiles against it, and the game
     // provides it at runtime.
@@ -58,10 +67,13 @@ dependencies {
 def bundledModules = [
         ':template-api',
         ':template-common',
-        sharedModule
+        ':template-shared'
 ]
 
 tasks.named('jar', Jar) {
+    // MCAgentsTemplateNeoforge-0.0.0+26.3.jar: the mod's version, then the game's.
+    archiveVersion = "${project.version}+${minecraftVersion}"
+
     bundledModules.each { path ->
         from project(path).sourceSets.main.output
     }

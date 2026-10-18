@@ -64,13 +64,13 @@ registry, the agent and the menu were a separate mod, MCAgents agents (`mcagents
 from core 0.10.0 they are part of core, and a mod needs core alone.
 
 `Holograms` is in `core-client`, which core publishes for the latest Minecraft release, and
-the template compiles against core 0.13.0's `core-api` and `core-common` only, which bring
+the mod compiles against core 0.13.0's `core-api` and `core-common` only, which bring
 `core-tool`. Core's artifact
 ids are `core-{module}` from 0.9.0; before that they started with `mcagents-`. Before a copy
 opens its first hologram it substitutes `io.github.mcagentsmods:core-client` with core's
 `:platforms:client` in `settings.gradle`, and adds
 `compileOnly "io.github.mcagentsmods:core-client:{coreVersion}"`
-to `platforms/shared/shared.gradle`. Like the rest of
+to `platforms/shared/build.gradle`. Like the rest of
 core, it is never bundled.
 
 ## The jars
@@ -81,7 +81,7 @@ core, it is never bundled.
 | NeoForge | ModDevGradle | `META-INF/neoforge.mods.toml` | `MCAgentsTemplateNeoforge-{version}+{minecraft}.jar` |
 | Forge | ForgeGradle | `META-INF/mods.toml` | `MCAgentsTemplateForge-{version}+{minecraft}.jar` |
 
-Each jar merges `api/`, `common/` and that Minecraft version's `platforms/shared/` into
+Each jar merges `api/`, `common/` and `platforms/shared/` into
 itself, declares that Minecraft version and no other, and requires `mcagents_core` at the
 core version it was built against or newer.
 

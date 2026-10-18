@@ -1,12 +1,11 @@
 name: Release
 
-# Builds the mod's jars, from platforms/forge, platforms/fabric and
-# platforms/neoforge, for every Minecraft version the tag builds (each loader has
-# a subproject per version, platforms/{loader}/{minecraft}; today that is the
-# latest release alone), and attaches them to a
-# GitHub release for the v{version} tag that Publish created:
-# MCAgentsTemplateFabric-{version}+{minecraft}.jar and so on. api, common and
-# shared are bundled inside each of them, so they are not attached on their own.
+# Builds the mod's jars, one each from platforms/forge, platforms/fabric and
+# platforms/neoforge, for the one Minecraft version the catalog names (the
+# latest release), and attaches them to a GitHub release for the v{version} tag
+# that Publish created: MCAgentsTemplateFabric-{version}+{minecraft}.jar and so
+# on. api, common and shared are bundled inside each of them, so they are not
+# attached on their own.
 #
 # A tag pushed with the workflow's own token starts no other workflow, so this
 # one runs when a Publish run on master finishes instead. It releases the
@@ -123,7 +122,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew assemble
 
-      - name: Collect one jar per loader and Minecraft version
+      - name: Collect one jar per loader
         if: steps.release.outputs.release == 'true'
         env:
           TAG: ${{ steps.release.outputs.tag }}
@@ -133,25 +132,21 @@ jobs:
             echo "::error::$TAG holds project-version $version"
             exit 1
           fi
+          # The Minecraft version the jars are named for, from the catalog.
+          minecraft=$(sed -n 's/^minecraft = "\(.*\)"$/\1/p' gradle/libs.versions.toml)
+          if [ -z "$minecraft" ]; then
+            echo "::error::gradle/libs.versions.toml names no minecraft version"
+            exit 1
+          fi
           mkdir -p release
           for loader in $LOADERS; do
-            # One subproject per Minecraft version, each with a build file.
-            builds=(platforms/"$loader"/*/build.gradle)
-            if [ ! -f "${builds[0]}" ]; then
-              echo "::error::no Minecraft version subproject under platforms/$loader"
+            # The mod jar alone: the sources jar ends in -sources.jar.
+            jars=(platforms/"$loader"/build/libs/*-"$version"+"$minecraft".jar)
+            if [ ${#jars[@]} -ne 1 ] || [ ! -f "${jars[0]}" ]; then
+              echo "::error::expected one $loader jar for $version on Minecraft $minecraft, found: ${jars[*]}"
               exit 1
             fi
-            for build in "${builds[@]}"; do
-              dir=$(dirname "$build")
-              minecraft=$(basename "$dir")
-              # The mod jar alone: the sources jar ends in -sources.jar.
-              jars=("$dir"/build/libs/*-"$version"+"$minecraft".jar)
-              if [ ${#jars[@]} -ne 1 ] || [ ! -f "${jars[0]}" ]; then
-                echo "::error::expected one $loader jar for $version on Minecraft $minecraft, found: ${jars[*]}"
-                exit 1
-              fi
-              cp "${jars[0]}" release/
-            done
+            cp "${jars[0]}" release/
           done
           ls -l release
 

@@ -35,10 +35,9 @@ Every dependency coordinate lives in the Gradle version catalog at
 | ForgeGradle | 7.0.40 |
 | MCAgents core | 0.13.0 |
 
-The entries that move with Minecraft come in one block per Minecraft version, each suffixed
-with it (`fabric-api-26-3` for 26.3):
+The entries that move with Minecraft sit in one block, for the one version the mod supports:
 
-| Entry | 26.3 |
+| Entry | Value |
 |---|---|
 | Minecraft | 26.3 |
 | Fabric API | 0.162.0+26.3 |
@@ -51,20 +50,14 @@ different Minecraft than core's cannot load beside it.
 ## The Minecraft version
 
 The mod supports **only the latest Minecraft release, today 26.3**, and never an older one
-beside it. `platforms/shared` and the three loader modules compile against Minecraft, so each
-is built for that version, listed once in `settings.gradle`. Each is a folder of shared
-sources with a Gradle subproject for the version, `platforms/{module}/{minecraft}`, named
-`template-{module}`, without the version; that name is also its artifact id. The subproject
-compiles the module's shared `src/` together with its own `src/`, which holds only what is
-particular to that version, such as Forge's `pack.mcmeta`. Code whose Minecraft API changes
-between releases is a class in the version folder; shared code never checks the version.
-`platforms/minecraft.gradle`, which the version subproject applies, takes the version from
-the folder's name, finds its coordinates in the catalog, and names the jar
-`MCAgentsTemplate{Module}-{version}+{minecraft}.jar`, so the jar name keeps the game's
-version. The loader metadata is expanded from the version, so each jar declares that
-Minecraft version and no other. `api` and `common` name no Minecraft type and are built once.
-Moving to a new Minecraft release replaces the version: the entry in `settings.gradle`, the
-catalog block, and each module's version folder.
+beside it. `platforms/shared` and the three loader modules compile against Minecraft. Each is
+one folder, `platforms/{module}`, with one `build.gradle` and one `src/`, and is the Gradle
+project `template-{module}`; that name is also its artifact id. Each build file reads the
+version from the catalog's `minecraft` entry and names the jar `MCAgentsTemplate{Module}-{version}+{minecraft}.jar`, so the jar name keeps the
+game's version. The loader metadata is expanded from the same entry, so each jar declares that
+Minecraft version and no other. `api` and `common` name no Minecraft type.
+Moving to a new Minecraft release replaces the catalog block and the pack formats in Forge's
+`pack.mcmeta`; no folder or project is renamed.
 
 ## MCAgents core
 
@@ -82,8 +75,9 @@ your GitHub user name and `GITHUB_TOKEN` to a token with the `read:packages` sco
 ./gradlew build
 ```
 
-Builds every module, runs the `common/` tests, and writes one mod jar per loader to `platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/`, such as
-`platforms/fabric/26.3/build/libs/MCAgentsTemplateFabric-{version}+26.3.jar`.
+Builds every module, runs the `common/` tests, and writes one mod jar per loader to
+`platforms/{fabric,neoforge,forge}/build/libs/`, such as
+`platforms/fabric/build/libs/MCAgentsTemplateFabric-{version}+26.3.jar`.
 
 ## Run
 
@@ -94,7 +88,7 @@ Builds every module, runs the `common/` tests, and writes one mod jar per loader
 ```
 
 `runClient` does not put core in the development game. Build core and copy its jar for the
-same loader and Minecraft version into that version subproject's `run/mods/` first.
+same loader and Minecraft version into that loader module's `run/mods/` first.
 
 Minecraft 26.3 draws through Vulkan or OpenGL with an sRGB surface. On a virtual display
 (Xvfb), which offers no sRGB OpenGL surface, a 26.3 client needs a Vulkan driver such as
@@ -131,7 +125,7 @@ each time a Publish run on `master` finishes:
    the tag `v{version}` does not exist, or already has a GitHub release.
 2. Otherwise it checks out the tag, runs `./gradlew assemble` with the same token Publish
    uses, and takes one jar from `platforms/forge`, `platforms/fabric` and
-   `platforms/neoforge`, from the version folder's `{minecraft}/build/libs/`.
+   `platforms/neoforge`, from each module's `build/libs/`.
 3. It creates the `v{version}` release with those jars attached and that version's
    `wiki/logs/{Major}/{Minor}/{Patch}/CHANGELOG.md` as its notes, then deletes the copy of
    the jars the run kept in Actions.

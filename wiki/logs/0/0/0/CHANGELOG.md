@@ -125,6 +125,20 @@ provides, as `compileOnly`. Add a third-party runtime library as `compileOnly` w
 compiled against, nest it with `include` (Fabric) or `jarJar` (NeoForge, Forge), and give the
 loader module a `runtimeOnly` line for it.
 
+- Each platform module is one folder with one build file: `platforms/shared`,
+  `platforms/fabric`, `platforms/neoforge` and `platforms/forge` each hold a `build.gradle` and
+  a `src/`, and `settings.gradle` points `template-{module}` at that folder. The `26.3/`
+  version folders, the `{module}.gradle` scripts and `platforms/minecraft.gradle` are gone;
+  Forge's `pack.mcmeta` moved to `platforms/forge/src/main/resources/`. The catalog names the
+  Minecraft version once, as its `minecraft` entry, and its loader entries lost the `-26-3`
+  suffix (`fabric-api`, `neoforge`, `forge`). The jars keep their names, such as
+  `MCAgentsTemplateFabric-0.0.0+26.3.jar`, and their contents, and land in
+  `platforms/{loader}/build/libs/`, where the Release workflow now takes them.
+
+What a reader has to do: in a copy, edit a module's build in `platforms/{module}/build.gradle`
+and put its code in `platforms/{module}/src/`. Move to a new Minecraft release by replacing the
+catalog block and Forge's pack formats; no folder or project is renamed.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

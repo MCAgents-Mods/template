@@ -60,7 +60,7 @@ breaks a longer one.
   merge that raises `project-version`, is the first version it publishes.
 * `.github/workflows/release.yml`. It names no placeholder either, and it releases nothing
   while the version is `0.0.0`. After each Publish run it attaches the mod's jars, one per
-  loader and Minecraft version, to the new tag's GitHub release.
+  loader, to the new tag's GitHub release.
 * `{shared}/git/pull-request-template.md` in `AGENTS.md`: it names a shared file, not this mod.
 
 ## 3. Do it
@@ -126,10 +126,10 @@ git grep -n -i template -- . ':!gradlew' ':!PROMPT.md' ':!README.md' ':!wiki/log
 ```
 
 The first command must print nothing. The second must pass, and
-`platforms/{fabric,neoforge,forge}/{minecraft}/build/libs/` must hold
+`platforms/{fabric,neoforge,forge}/build/libs/` must hold
 `MCAgents{Pascal}Fabric-0.0.0+{minecraft}.jar`, `MCAgents{Pascal}Neoforge-0.0.0+{minecraft}.jar`
-and `MCAgents{Pascal}Forge-0.0.0+{minecraft}.jar` for the Minecraft version in
-`settings.gradle`.
+and `MCAgents{Pascal}Forge-0.0.0+{minecraft}.jar` for the `minecraft` version in
+`gradle/libs.versions.toml`.
 
 ## 5. Clean up
 

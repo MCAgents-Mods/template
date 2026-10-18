@@ -6,14 +6,22 @@
 // loader's game. Each loader module bundles this one into its jar and adds only its entry
 // point and its events.
 
-// Built for the Minecraft version the mod supports: platforms/shared/{version}/build.gradle
-// applies Loom, used for the vanilla game alone (no loader, no mod metadata, no run
-// configs), then this.
+// Loom, used for the vanilla game alone: no loader, no mod metadata, no run configs.
+plugins {
+    id 'net.fabricmc.fabric-loom'
+}
 
-apply from: '../../minecraft.gradle'
+// The one Minecraft version this mod supports, the latest release. The catalog's minecraft
+// entry is the only place it is named.
+def minecraftVersion = libs.versions.minecraft.get()
 
 base {
     archivesName = 'MCAgentsTemplateShared'
+}
+
+tasks.named('jar', Jar) {
+    // MCAgentsTemplateShared-0.0.0+26.3.jar: the mod's version, then the game's.
+    archiveVersion = "${project.version}+${minecraftVersion}"
 }
 
 java {
@@ -37,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    minecraft libraryFor('minecraft')
+    minecraft libs.minecraft
 
     api project(':template-api')
     api project(':template-common')
@@ -50,7 +58,7 @@ publishing {
 
             pom {
                 name = 'MCAgentsTemplateShared'
-                description = "MCAgents template's shared game code, Minecraft ${minecraftVersion}"
+                description = "MCAgentsTemplate's shared game code, Minecraft ${minecraftVersion}"
                 url = 'https://github.com/MCAgents-Mods/template'
             }
         }

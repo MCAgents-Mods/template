@@ -1,16 +1,19 @@
-// The Forge mod jar: the entry point, which finds the game directory on the client, plus
-// everything platforms/shared and the modules below it carry.
+// The Fabric mod jar: the client entry point, which finds the game directory, plus everything
+// platforms/shared and the modules below it carry.
 //
-// This is the only module that may reference Forge types. Start-up lives in
+// This is the only module that may reference Fabric types. Start-up lives in
 // platforms/shared, the logic in common/ — see .agents/rules/repository.md.
 
-// Built for the Minecraft version the mod supports: platforms/forge/{version}/build.gradle
-// applies ForgeGradle, then this.
+plugins {
+    id 'net.fabricmc.fabric-loom'
+}
 
-apply from: '../../minecraft.gradle'
+// The one Minecraft version this mod supports, the latest release. The catalog's minecraft
+// entry is the only place it is named.
+def minecraftVersion = libs.versions.minecraft.get()
 
 base {
-    archivesName = 'MCAgentsTemplateForge'
+    archivesName = 'MCAgentsTemplateFabric'
 }
 
 java {
@@ -26,14 +29,19 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 repositories {
-    minecraft.mavenizer(it)
-    maven fg.forgeMaven
-    maven fg.minecraftLibsMaven
     mavenCentral()
 }
 
+loom {
+    mods {
+        'mcagents_template' {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
 dependencies {
-    def forge = minecraft.dependency("net.minecraftforge:forge:${versionFor('forge')}")
+    minecraft libs.minecraft
 
     // This mod's own modules are part of it: the jar task below merges their classes, and the
     // dev client runs them from this module's class path. This module is never published, so
@@ -41,24 +49,30 @@ dependencies {
     // against it with compileOnlyApi, since the mcagents_core mod provides it in game.
     implementation project(':template-api')
     implementation project(':template-common')
-    implementation project(sharedModule)
+    implementation project(':template-shared')
 
-    // Only compiled against: the game provides Forge at runtime.
-    compileOnly forge
+    // Only compiled against: the game provides Fabric Loader and Fabric API at runtime.
+    compileOnly libs.fabric.loader
+    compileOnly libs.fabric.api
 
-    // The dev client (runClient) is the one place no game provides it, so it gets it here.
-    runtimeOnly forge
+    // The dev client (runClient) is the one place no game provides them, so it gets them here.
+    runtimeOnly libs.fabric.loader
+    runtimeOnly libs.fabric.api
 }
 
 // api/, common/ and platforms/shared are this mod's own code, so their classes and resources
-// are merged into the mod jar rather than nested.
+// are merged into the mod jar rather than nested as separate Fabric mods. A third-party
+// runtime library would be bundled with Loom's `include` instead.
 def bundledModules = [
         ':template-api',
         ':template-common',
-        sharedModule
+        ':template-shared'
 ]
 
 tasks.named('jar', Jar) {
+    // MCAgentsTemplateFabric-0.0.0+26.3.jar: the mod's version, then the game's.
+    archiveVersion = "${project.version}+${minecraftVersion}"
+
     bundledModules.each { path ->
         from project(path).sourceSets.main.output
     }
@@ -76,18 +90,15 @@ processResources {
     // The core this build compiled against is the oldest the jar may run with.
     def coreVersion = libs.versions.mcagents.core.get()
     def minecraft = minecraftVersion
-    def next = minecraftNext
-    // The loader's major version, which mods.toml ranges are in: 66 from 26.3-66.0.11.
-    def forgeMajor = versionFor('forge').tokenize('-')[1].tokenize('.')[0]
+    def fabricLoader = libs.versions.fabric.loader.get()
     inputs.property 'version', modVersion
     inputs.property 'coreVersion', coreVersion
     inputs.property 'minecraft', minecraft
-    inputs.property 'minecraftNext', next
-    inputs.property 'forgeMajor', forgeMajor
+    inputs.property 'fabricLoader', fabricLoader
 
-    filesMatching('META-INF/mods.toml') {
+    filesMatching('fabric.mod.json') {
         expand version: modVersion, coreVersion: coreVersion, minecraft: minecraft,
-                minecraftNext: next, forgeMajor: forgeMajor
+                fabricLoader: fabricLoader
     }
 }
 

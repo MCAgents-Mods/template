@@ -41,6 +41,22 @@ public final class TemplatePaths {
         return dataDirectory;
     }
 
+    /**
+     * A file the mod keeps, such as its configuration: {@code {game_dir}/MCAgents/template/{name}}.
+     * Creates nothing.
+     *
+     * @param name the file's name, or a path relative to {@link #dataDirectory()}
+     * @throws IllegalArgumentException if {@code name} is blank or leads outside the directory
+     */
+    public Path file(String name) {
+        Objects.requireNonNull(name, "name");
+        Path resolved = dataDirectory.resolve(name).normalize();
+        if (name.isBlank() || resolved.equals(dataDirectory) || !resolved.startsWith(dataDirectory)) {
+            throw new IllegalArgumentException("Not a file in " + dataDirectory + ": " + name);
+        }
+        return resolved;
+    }
+
     /** Creates {@link #dataDirectory()} and its parents if they do not exist yet. */
     public Path createDataDirectory() throws IOException {
         return Files.createDirectories(dataDirectory);

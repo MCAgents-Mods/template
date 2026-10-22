@@ -45,14 +45,17 @@ or token store do not see each other.
 
 Each loader's entry point finds the game directory and calls
 `TemplateRuntime.start(gameDirectory)` in `platforms/shared/`. Start-up never throws: a
-failure is logged and the mod carries on without what it could not set up. The mod keeps its
-files under `{game_dir}/MCAgents/template/`.
+failure is logged and the mod carries on without what it could not set up. The mod keeps every
+file it writes, configuration and data alike, under `{game_dir}/MCAgents/template/`, the
+directory named for its repository, as every MCAgents mod does (core uses `MCAgents/core/`,
+chat `MCAgents/chat/`). `TemplatePaths` resolves it: `dataDirectory()` and `file(name)`.
 
 ## Reaching core
 
 | To | Use |
 |---|---|
 | Call a language model | Core's model client, from `io.github.mcagentsmods.core.api.model`. From core 0.13.0 a model is a `ModelChoice`, a provider and a model, and a task with no model of its own uses the player's global model from the Models page: `Models.chat(own)` and `Models.embedding(own)`, from `io.github.mcagentsmods.core.common.model`. See core's [`wiki/api/global-models.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/global-models.md) |
+| Move a file an older version kept elsewhere into the mod's directory | `ModFiles.moveIfAbsent(legacy, target)`, from `io.github.mcagentsmods.core.common.file`, from core 0.14.0: it moves a file or directory only when the new one does not exist yet. See core's [`wiki/api/mod-runtime.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/mod-runtime.md) |
 | Give the agent a tool | Register a `ToolSpec` and its body in `ToolRegistry.shared()`, from `io.github.mcagentsmods.core.tool`; core's agent offers it when a prompt needs its category. See core's [`wiki/api/tool-registry.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/tool-registry.md) |
 | Answer a prompt with tools | `Agents.agent(client)`, from `io.github.mcagentsmods.core.common.agent`. See core's [`wiki/api/agent.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/agent.md) |
 | Put a button on the menu G shows | Register an `AgentButton` with `Agents.buttons()`. See core's [`wiki/api/buttons.md`](https://github.com/MCAgents-Mods/core/blob/master/wiki/api/buttons.md) |

@@ -18,7 +18,11 @@ public final class MCAgentsTemplate {
     /** Directory every MCAgents mod keeps its files under, inside the game directory. */
     public static final String DATA_DIRECTORY = "MCAgents";
 
-    /** This mod's own directory inside {@link #DATA_DIRECTORY}, so no two mods share files. */
+    /**
+     * This mod's own directory inside {@link #DATA_DIRECTORY}, named for its repository, so no
+     * two mods share files. Every file the mod keeps, configuration and data alike, goes in it:
+     * core keeps its files in {@code MCAgents/core/}, chat in {@code MCAgents/chat/}.
+     */
     public static final String MOD_DIRECTORY = "template";
 
     private MCAgentsTemplate() {

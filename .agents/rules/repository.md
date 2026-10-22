@@ -87,6 +87,21 @@ reasoning.
 A `core` checkout beside this repository is built together with it; see
 [`../../wiki/environments/setup.md`](../../wiki/environments/setup.md).
 
+## Files on the player's disk
+
+The owner's rule for every MCAgents mod (2026-10-22), set so that no mod has to be asked for
+it again:
+
+* **Every file the mod keeps — configuration and data alike — lives in
+  `{game_dir}/MCAgents/template/`**, the directory named for this repository: core keeps its
+  files in `MCAgents/core/`, chat in `MCAgents/chat/`. Nothing goes loose in the game directory
+  or at the root of `MCAgents/`, which every MCAgents mod shares.
+* `MCAgentsTemplate.MOD_DIRECTORY` names the directory, and `TemplatePaths` is the one place
+  that resolves it: ask it for `dataDirectory()` or `file(name)`, never build the path by hand.
+* A file that moves keeps working for players who update: move it from its old place on start,
+  before anything opens it, with core's `ModFiles.moveIfAbsent(legacy, target)`, which never
+  overwrites a file already in the new place.
+
 ## Must not be introduced
 
 * A dependency from `api/` or `common/` on Minecraft or a loader.

@@ -44,4 +44,21 @@ class TemplatePathsTest {
     void aMissingGameDirectoryIsRejected() {
         assertThrows(NullPointerException.class, () -> TemplatePaths.under(null));
     }
+
+    @Test
+    void everyFileTheModKeepsIsInItsOwnDirectory() {
+        TemplatePaths paths = TemplatePaths.under(gameDirectory);
+
+        assertEquals(paths.dataDirectory().resolve("settings.properties"), paths.file("settings.properties"));
+        assertEquals(paths.dataDirectory().resolve("cache").resolve("a.json"), paths.file("cache/a.json"));
+    }
+
+    @Test
+    void aFileOutsideTheModsDirectoryIsRefused() {
+        TemplatePaths paths = TemplatePaths.under(gameDirectory);
+
+        assertThrows(IllegalArgumentException.class, () -> paths.file("../core/settings.properties"));
+        assertThrows(IllegalArgumentException.class, () -> paths.file(""));
+        assertThrows(IllegalArgumentException.class, () -> paths.file("."));
+    }
 }

@@ -139,6 +139,17 @@ What a reader has to do: in a copy, edit a module's build in `platforms/{module}
 and put its code in `platforms/{module}/src/`. Move to a new Minecraft release by replacing the
 catalog block and Forge's pack formats; no folder or project is renamed.
 
+- Every file the mod keeps, configuration and data alike, lives in
+  `{game_dir}/MCAgents/template/`, the directory named for the repository, as core keeps its
+  files in `MCAgents/core/` and chat in `MCAgents/chat/`. The rule is in
+  `.agents/rules/repository.md`, so every mod made from the starter follows it, and
+  `TemplatePaths.file(name)` resolves a file in that directory, refusing one outside it. The
+  mod compiles against core 0.14.0, whose `ModFiles.moveIfAbsent` moves a file an older
+  version kept elsewhere into the directory.
+
+What a reader has to do: in a copy, resolve every file through `TemplatePaths`; `PROMPT.md`
+renames the directory to the new repository's name with the rest.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

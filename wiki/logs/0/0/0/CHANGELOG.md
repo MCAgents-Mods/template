@@ -150,6 +150,11 @@ catalog block and Forge's pack formats; no folder or project is renamed.
 What a reader has to do: in a copy, resolve every file through `TemplatePaths`; `PROMPT.md`
 renames the directory to the new repository's name with the rest.
 
+- Planned on 2026-10-30, with core 0.15.0 and chat 0.15.1: a rule that a mod registers a
+  command only behind the permission level its effect needs, and compiling against core
+  0.15.0, which puts `/agents` on dedicated servers at level 4. The template registers no
+  command of its own. This entry is rewritten when the work lands.
+
 ## Fixed
 
 - The Forge jar carries `pack.mcmeta`, described as `MCAgentsTemplate resources`, which

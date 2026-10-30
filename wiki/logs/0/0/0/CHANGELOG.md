@@ -150,10 +150,14 @@ catalog block and Forge's pack formats; no folder or project is renamed.
 What a reader has to do: in a copy, resolve every file through `TemplatePaths`; `PROMPT.md`
 renames the directory to the new repository's name with the rest.
 
-- Planned on 2026-10-30, with core 0.15.0 and chat 0.15.1: a rule that a mod registers a
-  command only behind the permission level its effect needs, and compiling against core
-  0.15.0, which puts `/agents` on dedicated servers at level 4. The template registers no
-  command of its own. This entry is rewritten when the work lands.
+- A command a player should not be able to use is never reachable by one: the
+  `## Commands` rule in `.agents/rules/repository.md` says a server command gets Brigadier's
+  `requires` at the level its effect needs, is checked again where the work is done, and
+  answers only the caller, never with a secret. The mod compiles against core 0.15.0, whose
+  `/agents` on dedicated servers is the pattern. The template registers no command of its own.
+
+What a reader has to do: in a copy, gate any server command the mod adds this way, or prefer
+a hologram, which needs no permission.
 
 ## Fixed
 

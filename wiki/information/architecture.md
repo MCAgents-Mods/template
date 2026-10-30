@@ -67,7 +67,7 @@ registry, the agent and the menu were a separate mod, MCAgents agents (`mcagents
 from core 0.10.0 they are part of core, and a mod needs core alone.
 
 `Holograms` is in `core-client`, which core publishes for the latest Minecraft release, and
-the mod compiles against core 0.14.0's `core-api` and `core-common` only, which bring
+the mod compiles against core 0.15.0's `core-api` and `core-common` only, which bring
 `core-tool`. Core's artifact
 ids are `core-{module}` from 0.9.0; before that they started with `mcagents-`. Before a copy
 opens its first hologram it substitutes `io.github.mcagentsmods:core-client` with core's

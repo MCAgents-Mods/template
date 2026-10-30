@@ -102,10 +102,31 @@ it again:
   before anything opens it, with core's `ModFiles.moveIfAbsent(legacy, target)`, which never
   overwrites a file already in the new place.
 
+## Commands
+
+The owner's rule for every MCAgents mod (2026-10-30): a command a player should not be able to
+use is never reachable by one.
+
+* **A mod registers a command only behind the permission level its effect needs.** A command
+  that only touches the player's own client — their settings, their keys, their files — needs
+  none. A command that runs on a server and changes or reveals anything beyond the caller's own
+  view — keys, money, files, other players — gets Brigadier's `requires` at the level that
+  effect needs: `Commands.hasPermission(Commands.LEVEL_OWNERS)` for anything that spends the
+  server owner's money or touches their keys.
+* **The check is also made where the work is done**, not only on the command tree, so a second
+  way in (a console bridge, a hologram button, another mod) is refused the same way. Core's
+  `/agents` is the pattern: `requires` on the tree, and `ServerEntrypoint`'s
+  `ServerCommandAuthority` on every call.
+* **A reply never contains a secret** and goes to the caller alone (`sendSuccess(…, false)`),
+  never broadcast to other operators.
+* Prefer a hologram to a command for anything the player does in game: core's holograms need
+  no permission because they only ever reach the player's own client.
+
 ## Must not be introduced
 
 * A dependency from `api/` or `common/` on Minecraft or a loader.
 * A core class inside any jar this repository builds.
 * A Minecraft, loader or core version that differs from core's own catalog.
+* A server command with no permission level, or one that checks only the command tree.
 * Player data in the repository. Everything the mod writes goes under
   `{game_dir}/MCAgents/template/` on the player's machine.
